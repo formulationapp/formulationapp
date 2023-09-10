@@ -7,4 +7,5 @@ type Form struct {
 	Name        string
 	Definition  string `gorm:"type:text"`
 	WorkspaceID uint
+	Secret      string
 }
