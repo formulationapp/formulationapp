@@ -1,8 +1,12 @@
 package controller
 
-import "github.com/formulationapp/formulationapp/internal/service"
+import (
+	"github.com/formulationapp/formulationapp/internal/service"
+	"github.com/labstack/echo/v4"
+)
 
 type WorkspaceController interface {
+	ListWorkspaces(c echo.Context) error
 }
 
 type workspaceController struct {
@@ -13,4 +17,9 @@ func newWorkspaceController(workspaceService service.WorkspaceService) Workspace
 	return &workspaceController{
 		workspaceService: workspaceService,
 	}
+}
+
+func (w workspaceController) ListWorkspaces(c echo.Context) error {
+	//TODO implement me
+	panic("implement me")
 }

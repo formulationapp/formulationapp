@@ -6,6 +6,7 @@ import (
 	"github.com/formulationapp/formulationapp/internal/repository"
 	"github.com/formulationapp/formulationapp/internal/service"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -25,8 +26,10 @@ func main() {
 		log.Fatalf("Error opening database: %s", err)
 	}
 
+	e := echo.New()
+
 	repositories := repository.NewRepositories(db)
 	services := service.NewServices(repositories)
-	controllers := controller.NewControllers(services)
+	controllers := controller.NewControllers(services, e)
 	_ = controllers
 }
