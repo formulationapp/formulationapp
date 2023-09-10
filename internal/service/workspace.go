@@ -11,18 +11,31 @@ type WorkspaceService interface {
 }
 
 type workspaceService struct {
-	workspaceRepository repository.WorkspaceRepository
+	workspaceRepository  repository.WorkspaceRepository
+	membershipRepository repository.MembershipRepository
 }
 
-func newWorkspaceService(workspaceRepository repository.WorkspaceRepository) WorkspaceService {
+func newWorkspaceService(workspaceRepository repository.WorkspaceRepository, membershipRepository repository.MembershipRepository) WorkspaceService {
 	return &workspaceService{
-		workspaceRepository: workspaceRepository,
+		workspaceRepository:  workspaceRepository,
+		membershipRepository: membershipRepository,
 	}
 }
 
 func (w workspaceService) GetUserWorkspaces(userID uint) ([]model.Workspace, error) {
-	//TODO implement me
-	panic("implement me")
+	memberships, err := w.membershipRepository.GetByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
+	var workspaces []model.Workspace
+	for _, membership := range memberships {
+		workspace, err := w.workspaceRepository.GetByID(membership.WorkspaceID)
+		if err != nil {
+			return nil, err
+		}
+		workspaces = append(workspaces, workspace)
+	}
+	return workspaces, nil
 }
 
 func (w workspaceService) GetWorkspace(userID uint, workspaceID uint) (*model.Workspace, error) {

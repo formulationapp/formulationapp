@@ -25,7 +25,7 @@ type controllers struct {
 
 func NewControllers(services service.Services) Controllers {
 	userController := newUserController(services.User())
-	workspaceController := newWorkspaceController(services.Workspace())
+	workspaceController := newWorkspaceController(services.Workspace(), services.User())
 	membershipController := newMembershipController(services.Membership())
 	formController := newFormController(services.Form())
 	answerController := newAnswerController(services.Answer())

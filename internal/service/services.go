@@ -22,9 +22,9 @@ type services struct {
 }
 
 func NewServices(repositories repository.Repositories, config dto.Config) Services {
-	userService := newUserService(repositories.User(), config)
+	userService := newUserService(repositories.User(), repositories.Membership(), repositories.Workspace(), config)
 	membershipService := newMembershipService(repositories.Membership())
-	workspaceService := newWorkspaceService(repositories.Workspace())
+	workspaceService := newWorkspaceService(repositories.Workspace(), repositories.Membership())
 	formService := newFormService(repositories.Form())
 	answerService := newAnswerService(repositories.Answer())
 

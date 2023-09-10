@@ -2,28 +2,32 @@ package service
 
 import (
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/model"
 	"github.com/formulationapp/formulationapp/internal/repository"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
-	"strconv"
-	"time"
 )
 
 type UserService interface {
 	Login(email string, password string) (string, error)
 	Register(email string, password string) (string, error)
 	DecodeToken(token string) (uint, error)
+	Authenticate(token string) (model.User, error)
 }
 
 type userService struct {
-	userRepository repository.UserRepository
-	config         dto.Config
+	userRepository       repository.UserRepository
+	membershipRepository repository.MembershipRepository
+	workspaceRepository  repository.WorkspaceRepository
+	config               dto.Config
 }
 
-func newUserService(userRepository repository.UserRepository, config dto.Config) UserService {
-	return &userService{userRepository, config}
+func newUserService(userRepository repository.UserRepository, membershipRepository repository.MembershipRepository, workspaceRepository repository.WorkspaceRepository, config dto.Config) UserService {
+	return &userService{userRepository, membershipRepository, workspaceRepository, config}
 }
 
 func (u userService) Login(email string, password string) (string, error) {
@@ -61,13 +65,22 @@ func (u userService) Register(email string, password string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error saving user")
 	}
+
+	workspace := model.Workspace{Name: "Default"}
+	workspace, err = u.workspaceRepository.Create(workspace)
+	if err != nil {
+		return "", fmt.Errorf("error creating workspace")
+	}
+	membership := model.Membership{UserID: user.ID, WorkspaceID: workspace.ID}
+	_, err = u.membershipRepository.Create(membership)
+
 	return u.generateJwt(user)
 }
 
 func (u userService) generateJwt(user model.User) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(6 * time.Hour)
+	claims["exp"] = time.Now().Add(6 * time.Hour).Unix()
 	claims["user_id"] = fmt.Sprint(user.ID)
 	claims["email"] = user.Email
 	tokenString, err := token.SignedString([]byte(u.config.SigningSecret))
@@ -91,4 +104,16 @@ func (u userService) DecodeToken(token string) (uint, error) {
 		return 0, err
 	}
 	return uint(userID), nil
+}
+
+func (u userService) Authenticate(token string) (model.User, error) {
+	userID, err := u.DecodeToken(token)
+	if err != nil {
+		return model.User{}, err
+	}
+	user, err := u.userRepository.FindByID(userID)
+	if err != nil {
+		return model.User{}, err
+	}
+	return user, nil
 }
