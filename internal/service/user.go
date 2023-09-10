@@ -29,23 +29,32 @@ func newUserService(userRepository repository.UserRepository, config dto.Config)
 func (u userService) Login(email string, password string) (string, error) {
 	user, err := u.userRepository.FindByEmail(email)
 	if err != nil {
-		return "", nil
+		return "", dto.AppError(err)
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", fmt.Errorf("invalid password")
+		return "", dto.AppError(fmt.Errorf("invalid password"))
 	}
 	return u.generateJwt(user)
 }
 
 func (u userService) Register(email string, password string) (string, error) {
+	if email == "" {
+		return "", dto.AppError(fmt.Errorf("email is required"))
+	}
+	if password == "" {
+		return "", dto.AppError(fmt.Errorf("password is required"))
+	}
+	if len(password) < 3 {
+		return "", dto.AppError(fmt.Errorf("password must be at least 8 characters"))
+	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("error hashing password")
 	}
 	userByEmail, err := u.userRepository.FindByEmail(email)
 	if userByEmail.ID != 0 {
-		return "", fmt.Errorf("user with email %s already exists", email)
+		return "", dto.AppError(fmt.Errorf("user with email %s already exists", email))
 	}
 	user := model.User{Email: email, Password: string(hashedPassword)}
 	user, err = u.userRepository.Save(user)
@@ -56,12 +65,12 @@ func (u userService) Register(email string, password string) (string, error) {
 }
 
 func (u userService) generateJwt(user model.User) (string, error) {
-	token := jwt.New(jwt.SigningMethodEdDSA)
+	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(6 * time.Hour)
 	claims["user_id"] = fmt.Sprint(user.ID)
 	claims["email"] = user.Email
-	tokenString, err := token.SignedString(u.config.SigningSecret)
+	tokenString, err := token.SignedString([]byte(u.config.SigningSecret))
 	if err != nil {
 		return "", err
 	}
@@ -71,7 +80,7 @@ func (u userService) generateJwt(user model.User) (string, error) {
 func (u userService) DecodeToken(token string) (uint, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return u.config.SigningSecret, nil
+		return []byte(u.config.SigningSecret), nil
 	})
 	if err != nil {
 		return 0, err

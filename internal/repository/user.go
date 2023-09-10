@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/charmbracelet/log"
+	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/model"
 	"gorm.io/gorm"
 )
@@ -26,7 +27,7 @@ func (u userRepository) FindByID(id uint) (model.User, error) {
 	var user model.User
 	u.db.First(&user, id)
 	if user.ID == 0 {
-		return model.User{}, fmt.Errorf("user with id %d not found", id)
+		return model.User{}, dto.AppError(fmt.Errorf("user with id %d not found", id))
 	}
 	return user, nil
 }
@@ -35,7 +36,7 @@ func (u userRepository) FindByEmail(email string) (model.User, error) {
 	var user model.User
 	u.db.Where("email = ?", email).First(&user)
 	if user.ID == 0 {
-		return model.User{}, fmt.Errorf("user with email %s not found", email)
+		return model.User{}, dto.AppError(fmt.Errorf("user with email %s not found", email))
 	}
 	return user, nil
 }

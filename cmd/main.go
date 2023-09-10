@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/charmbracelet/log"
 	"github.com/formulationapp/formulationapp/internal/controller"
+	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/repository"
 	"github.com/formulationapp/formulationapp/internal/service"
 	"github.com/joho/godotenv"
@@ -28,9 +30,24 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			err := next(c)
+			if err != nil {
+				var appError dto.AppError
+				switch {
+				case errors.As(err, &appError):
+					return echo.NewHTTPError(400, err.Error())
+				}
+			}
+			return err
+		}
+	})
+
+	config := dto.Config{SigningSecret: os.Getenv("SIGNING_SECRET")}
 
 	repositories := repository.NewRepositories(db)
-	services := service.NewServices(repositories)
+	services := service.NewServices(repositories, config)
 	controllers := controller.NewControllers(services)
 	controllers.Route(e)
 

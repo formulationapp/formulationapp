@@ -1,6 +1,9 @@
 package service
 
-import "github.com/formulationapp/formulationapp/internal/repository"
+import (
+	"github.com/formulationapp/formulationapp/internal/dto"
+	"github.com/formulationapp/formulationapp/internal/repository"
+)
 
 type Services interface {
 	User() UserService
@@ -18,8 +21,8 @@ type services struct {
 	answerService     AnswerService
 }
 
-func NewServices(repositories repository.Repositories) Services {
-	userService := newUserService(repositories.User())
+func NewServices(repositories repository.Repositories, config dto.Config) Services {
+	userService := newUserService(repositories.User(), config)
 	membershipService := newMembershipService(repositories.Membership())
 	workspaceService := newWorkspaceService(repositories.Workspace())
 	formService := newFormService(repositories.Form())
