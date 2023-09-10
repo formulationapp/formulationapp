@@ -1,6 +1,10 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"github.com/charmbracelet/log"
+	"github.com/formulationapp/formulationapp/internal/model"
+	"gorm.io/gorm"
+)
 
 type FormRepository interface {
 }
@@ -10,5 +14,9 @@ type formRepository struct {
 }
 
 func newFormRepository(db *gorm.DB) FormRepository {
+	err := db.AutoMigrate(model.Form{})
+	if err != nil {
+		log.Fatalf("failed to migrate form model: %s", err)
+	}
 	return &formRepository{db}
 }

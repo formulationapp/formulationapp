@@ -1,6 +1,10 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"github.com/charmbracelet/log"
+	"github.com/formulationapp/formulationapp/internal/model"
+	"gorm.io/gorm"
+)
 
 type AnswerRepository interface {
 }
@@ -10,5 +14,9 @@ type answerRepository struct {
 }
 
 func newAnswerRepository(db *gorm.DB) AnswerRepository {
+	err := db.AutoMigrate(model.Answer{})
+	if err != nil {
+		log.Fatalf("failed to migrate answer model: %s", err)
+	}
 	return &answerRepository{db}
 }
