@@ -11,6 +11,8 @@ type Controllers interface {
 	Membership() MembershipController
 	Form() FormController
 	Answer() AnswerController
+
+	Route(e *echo.Echo)
 }
 
 type controllers struct {
@@ -21,28 +23,12 @@ type controllers struct {
 	answerController     AnswerController
 }
 
-func NewControllers(services service.Services, e *echo.Echo) Controllers {
+func NewControllers(services service.Services) Controllers {
 	userController := newUserController(services.User())
 	workspaceController := newWorkspaceController(services.Workspace())
 	membershipController := newMembershipController(services.Membership())
 	formController := newFormController(services.Form())
 	answerController := newAnswerController(services.Answer())
-
-	e.POST("/auth/login", userController.Login)
-	e.POST("/auth/register", userController.Register)
-
-	e.GET("/workspaces", workspaceController.ListWorkspaces)
-
-	e.GET("/workspaces/:workspaceID/forms", formController.ListForms)
-	e.GET("/workspaces/:workspaceID/forms/:formID", formController.GetForm)
-	e.POST("/workspaces/:workspaceID/forms", formController.CreateForm)
-	e.PUT("/workspaces/:workspaceID/forms", formController.UpdateForm)
-	e.DELETE("/workspaces/:workspaceID/forms", formController.DeleteForm)
-
-	e.GET("/workspaces/:workspaceID/forms/:formID/answers", answerController.ListAnswers)
-
-	e.PUT("/forms/:secret/answers", answerController.PutAnswer)
-
 	return &controllers{
 		userController:       userController,
 		workspaceController:  workspaceController,
@@ -70,4 +56,21 @@ func (c controllers) Form() FormController {
 
 func (c controllers) Answer() AnswerController {
 	return c.answerController
+}
+
+func (c controllers) Route(e *echo.Echo) {
+	e.POST("/auth/login", c.userController.Login)
+	e.POST("/auth/register", c.userController.Register)
+
+	e.GET("/workspaces", c.workspaceController.ListWorkspaces)
+
+	e.GET("/workspaces/:workspaceID/forms", c.formController.ListForms)
+	e.GET("/workspaces/:workspaceID/forms/:formID", c.formController.GetForm)
+	e.POST("/workspaces/:workspaceID/forms", c.formController.CreateForm)
+	e.PUT("/workspaces/:workspaceID/forms", c.formController.UpdateForm)
+	e.DELETE("/workspaces/:workspaceID/forms", c.formController.DeleteForm)
+
+	e.GET("/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
+
+	e.PUT("/forms/:secret/answers", c.answerController.PutAnswer)
 }

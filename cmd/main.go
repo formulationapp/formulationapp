@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/charmbracelet/log"
 	"github.com/formulationapp/formulationapp/internal/controller"
 	"github.com/formulationapp/formulationapp/internal/repository"
@@ -30,6 +31,17 @@ func main() {
 
 	repositories := repository.NewRepositories(db)
 	services := service.NewServices(repositories)
-	controllers := controller.NewControllers(services, e)
-	_ = controllers
+	controllers := controller.NewControllers(services)
+	controllers.Route(e)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+
+	e.HideBanner = true
+	e.HidePort = true
+	log.Infof("Starting server on port %s", port)
+	err = e.Start(fmt.Sprintf(":%s", port))
+	log.Fatal(err)
 }
