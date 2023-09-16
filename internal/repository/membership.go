@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/charmbracelet/log"
 	"github.com/formulationapp/formulationapp/internal/model"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -18,7 +18,7 @@ type membershipRepository struct {
 func newMembershipRepository(db *gorm.DB) MembershipRepository {
 	err := db.AutoMigrate(&model.Membership{})
 	if err != nil {
-		log.Fatalf("failed to migrate membership model: %s", err)
+		logrus.Fatalf("failed to migrate membership model: %s", err)
 	}
 	return &membershipRepository{db}
 }

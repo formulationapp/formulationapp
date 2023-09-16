@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/charmbracelet/log"
 	"github.com/formulationapp/formulationapp/internal/model"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -18,7 +18,7 @@ type workspaceRepository struct {
 func newWorkspaceRepository(db *gorm.DB) WorkspaceRepository {
 	err := db.AutoMigrate(model.Workspace{})
 	if err != nil {
-		log.Fatalf("failed to migrate workspace model: %s", err)
+		logrus.Fatalf("failed to migrate workspace model: %s", err)
 	}
 	return &workspaceRepository{db}
 }

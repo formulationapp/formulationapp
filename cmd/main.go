@@ -3,30 +3,31 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/charmbracelet/log"
+	"os"
+
 	"github.com/formulationapp/formulationapp/internal/controller"
 	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/repository"
 	"github.com/formulationapp/formulationapp/internal/service"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"os"
 )
 
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
+		logrus.Fatalf("Error loading .env file: %s", err)
 	}
 	dsn := os.Getenv("DSN")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
-		log.Fatalf("Error opening database: %s", err)
+		logrus.Fatalf("Error opening database: %s", err)
 	}
 
 	e := echo.New()
@@ -58,7 +59,7 @@ func main() {
 
 	e.HideBanner = true
 	e.HidePort = true
-	log.Infof("Starting server on port %s", port)
+	logrus.Infof("Starting server on port %s", port)
 	err = e.Start(fmt.Sprintf(":%s", port))
-	log.Fatal(err)
+	logrus.Fatal(err)
 }

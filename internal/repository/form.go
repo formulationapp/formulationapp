@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/charmbracelet/log"
 	"github.com/formulationapp/formulationapp/internal/model"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -16,7 +16,7 @@ type formRepository struct {
 func newFormRepository(db *gorm.DB) FormRepository {
 	err := db.AutoMigrate(model.Form{})
 	if err != nil {
-		log.Fatalf("failed to migrate form model: %s", err)
+		logrus.Fatalf("failed to migrate form model: %s", err)
 	}
 	return &formRepository{db}
 }

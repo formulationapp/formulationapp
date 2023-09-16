@@ -2,9 +2,10 @@ package repository
 
 import (
 	"fmt"
-	"github.com/charmbracelet/log"
+
 	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/model"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -44,7 +45,7 @@ func (u userRepository) FindByEmail(email string) (model.User, error) {
 func newUserRepository(db *gorm.DB) UserRepository {
 	err := db.AutoMigrate(&model.User{})
 	if err != nil {
-		log.Fatalf("failed to migrate user model: %s", err)
+		logrus.Fatalf("failed to migrate user model: %s", err)
 	}
 	return &userRepository{db}
 }
