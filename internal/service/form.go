@@ -82,7 +82,7 @@ func (f formService) UpdateForm(userID, workspaceID, formID uint, payload dto.Up
 
 	form, err = f.formRepository.GetByIDAndWorkspaceID(formID, workspaceID)
 	if err != nil {
-		return form, nil
+		return form, err
 	}
 
 	form.Name = payload.Name

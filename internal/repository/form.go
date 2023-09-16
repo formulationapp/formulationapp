@@ -12,10 +12,20 @@ type FormRepository interface {
 	GetByWorkspaceID(workspaceID uint) ([]model.Form, error)
 	GetByIDAndWorkspaceID(id, workspaceID uint) (model.Form, error)
 	Delete(form model.Form) error
+	GetBySecret(secret string) (model.Form, error)
 }
 
 type formRepository struct {
 	db *gorm.DB
+}
+
+func (f formRepository) GetBySecret(secret string) (model.Form, error) {
+	var form model.Form
+	tx := f.db.Where("secret = ?", secret).First(&form)
+	if tx.Error != nil {
+		return form, tx.Error
+	}
+	return form, nil
 }
 
 func (f formRepository) GetByIDAndWorkspaceID(id, workspaceID uint) (model.Form, error) {
