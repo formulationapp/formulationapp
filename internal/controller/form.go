@@ -1,8 +1,12 @@
 package controller
 
 import (
+	"github.com/formulationapp/formulationapp/internal/dto"
+	"github.com/formulationapp/formulationapp/internal/model"
 	"github.com/formulationapp/formulationapp/internal/service"
+	"github.com/formulationapp/formulationapp/internal/util"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type FormController interface {
@@ -14,36 +18,90 @@ type FormController interface {
 }
 
 type formController struct {
+	userService service.UserService
 	formService service.FormService
 }
 
 func (f formController) CreateForm(c echo.Context) error {
-	//TODO implement me
-	panic("implement me")
+	userID, err := f.userService.DecodeToken(util.GetTokenFromContext(c))
+	if err != nil {
+		return err
+	}
+
+	var payload dto.CreateFormRequest
+	err = c.Bind(&payload)
+	if err != nil {
+		return err
+	}
+
+	form, err := f.formService.CreateForm(userID, util.ParseParamID(c.Param("workspaceID")), payload)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, form)
 }
 
 func (f formController) ListForms(c echo.Context) error {
-	//TODO implement me
-	panic("implement me")
+	userID, err := f.userService.DecodeToken(util.GetTokenFromContext(c))
+	if err != nil {
+		return err
+	}
+
+	forms, err := f.formService.GetForms(userID, util.ParseParamID(c.Param("workspaceID")))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, forms)
 }
 
 func (f formController) GetForm(c echo.Context) error {
-	//TODO implement me
-	panic("implement me")
+	userID, err := f.userService.DecodeToken(util.GetTokenFromContext(c))
+	if err != nil {
+		return err
+	}
+
+	form, err := f.formService.GetForm(userID, util.ParseParamID(c.Param("workspaceID")), util.ParseParamID(c.Param("formID")))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, form)
 }
 
 func (f formController) UpdateForm(c echo.Context) error {
-	//TODO implement me
-	panic("implement me")
+	userID, err := f.userService.DecodeToken(util.GetTokenFromContext(c))
+	if err != nil {
+		return err
+	}
+
+	var payload dto.UpdateFormRequest
+	err = c.Bind(&payload)
+	if err != nil {
+		return err
+	}
+
+	form, err := f.formService.UpdateForm(userID, util.ParseParamID(c.Param("workspaceID")), util.ParseParamID(c.Param("formID")), payload)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, form)
 }
 
 func (f formController) DeleteForm(c echo.Context) error {
-	//TODO implement me
-	panic("implement me")
+	userID, err := f.userService.DecodeToken(util.GetTokenFromContext(c))
+	if err != nil {
+		return err
+	}
+
+	err = f.formService.DeleteForm(userID, util.ParseParamID(c.Param("workspaceID")), util.ParseParamID(c.Param("formID")))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, model.Form{})
 }
 
-func newFormController(formService service.FormService) FormController {
+func newFormController(userService service.UserService, formService service.FormService) FormController {
 	return &formController{
+		userService: userService,
 		formService: formService,
 	}
 }

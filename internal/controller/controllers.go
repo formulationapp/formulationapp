@@ -27,7 +27,7 @@ func NewControllers(services service.Services) Controllers {
 	userController := newUserController(services.User())
 	workspaceController := newWorkspaceController(services.Workspace(), services.User())
 	membershipController := newMembershipController(services.Membership())
-	formController := newFormController(services.Form())
+	formController := newFormController(services.User(), services.Form())
 	answerController := newAnswerController(services.Answer())
 	return &controllers{
 		userController:       userController,

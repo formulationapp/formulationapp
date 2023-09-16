@@ -7,7 +7,8 @@ import (
 
 type WorkspaceService interface {
 	GetUserWorkspaces(userID uint) ([]model.Workspace, error)
-	GetWorkspace(userID uint, workspaceID uint) (*model.Workspace, error)
+	GetWorkspace(userID uint, workspaceID uint) (model.Workspace, error)
+	UserHasAccessToWorkspace(userID, workspaceID uint) (bool, error)
 }
 
 type workspaceService struct {
@@ -38,7 +39,18 @@ func (w workspaceService) GetUserWorkspaces(userID uint) ([]model.Workspace, err
 	return workspaces, nil
 }
 
-func (w workspaceService) GetWorkspace(userID uint, workspaceID uint) (*model.Workspace, error) {
-	//TODO implement me
-	panic("implement me")
+func (w workspaceService) GetWorkspace(userID uint, workspaceID uint) (model.Workspace, error) {
+	membership, err := w.membershipRepository.GetByUserIDAndWorkspaceID(userID, workspaceID)
+	if err != nil {
+		return model.Workspace{}, err
+	}
+	return w.workspaceRepository.GetByID(membership.WorkspaceID)
+}
+
+func (w workspaceService) UserHasAccessToWorkspace(userID, workspaceID uint) (bool, error) {
+	membership, err := w.membershipRepository.GetByUserIDAndWorkspaceID(userID, workspaceID)
+	if err != nil {
+		return false, err
+	}
+	return membership.UserID > 0 && membership.WorkspaceID > 0, nil
 }

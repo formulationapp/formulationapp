@@ -9,6 +9,7 @@ import (
 type MembershipRepository interface {
 	Create(membership model.Membership) (model.Membership, error)
 	GetByUserID(userID uint) ([]model.Membership, error)
+	GetByUserIDAndWorkspaceID(userID, workspaceID uint) (model.Membership, error)
 }
 
 type membershipRepository struct {
@@ -33,6 +34,18 @@ func (m membershipRepository) Create(membership model.Membership) (model.Members
 
 func (m membershipRepository) GetByUserID(userID uint) ([]model.Membership, error) {
 	var memberships []model.Membership
-	m.db.Where("user_id = ?", userID).Find(&memberships)
+	tx := m.db.Where("user_id = ?", userID).Find(&memberships)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
 	return memberships, nil
+}
+
+func (m membershipRepository) GetByUserIDAndWorkspaceID(userID, workspaceID uint) (model.Membership, error) {
+	var membership model.Membership
+	tx := m.db.Where("user_id = ? and workspace_id = ?", userID, workspaceID).First(&membership)
+	if tx.Error != nil {
+		return membership, tx.Error
+	}
+	return membership, nil
 }

@@ -25,7 +25,7 @@ func NewServices(repositories repository.Repositories, config dto.Config) Servic
 	userService := newUserService(repositories.User(), repositories.Membership(), repositories.Workspace(), config)
 	membershipService := newMembershipService(repositories.Membership())
 	workspaceService := newWorkspaceService(repositories.Workspace(), repositories.Membership())
-	formService := newFormService(repositories.Form())
+	formService := newFormService(repositories.Form(), workspaceService)
 	answerService := newAnswerService(repositories.Answer())
 
 	return &services{
