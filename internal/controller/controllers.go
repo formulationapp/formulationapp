@@ -28,7 +28,7 @@ func NewControllers(services service.Services) Controllers {
 	workspaceController := newWorkspaceController(services.Workspace(), services.User())
 	membershipController := newMembershipController(services.Membership())
 	formController := newFormController(services.User(), services.Form())
-	answerController := newAnswerController(services.Answer())
+	answerController := newAnswerController(services.User(), services.Answer())
 	return &controllers{
 		userController:       userController,
 		workspaceController:  workspaceController,
@@ -72,5 +72,5 @@ func (c controllers) Route(e *echo.Echo) {
 
 	e.GET("/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
 
-	e.PUT("/forms/:secret/answers", c.answerController.PutAnswer)
+	e.PUT("/forms/:secret/answers/:submission", c.answerController.PutAnswer)
 }

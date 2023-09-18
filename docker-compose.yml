@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      DSN: host=db user=postgres password=jqKwlS9vN0mfm1v dbname=formulation sslmode=disable
+      SIGNING_SECRET: SecretYouShouldHide
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: formulation
+      POSTGRES_PASSWORD: 'jqKwlS9vN0mfm1v'
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  db:

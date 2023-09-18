@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"gorm.io/driver/postgres"
 	"os"
 
 	"github.com/formulationapp/formulationapp/internal/controller"
@@ -12,18 +13,14 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		logrus.Fatalf("Error loading .env file: %s", err)
-	}
+	_ = godotenv.Load()
 	dsn := os.Getenv("DSN")
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
