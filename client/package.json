@@ -36,7 +36,7 @@
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
     "@types/jsdom": "^21.1.2",
-    "@types/node": "^18.17.15",
+    "@types/node": "^20.6.3",
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue/test-utils": "^2.4.1",
     "@vue/tsconfig": "^0.4.0",

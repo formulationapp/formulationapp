@@ -1,4 +1,4 @@
-FROM node as clientBuilder
+FROM node:18 as clientBuilder
 WORKDIR /app
 COPY client/ .
 RUN yarn
