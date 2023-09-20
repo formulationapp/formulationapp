@@ -1,5 +1,64 @@
 @import './base.css';
 
 #app {
-    height: 100vh;
+    height: 100vh !important;
+}
+
+.titles h1 {
+    display: block !important;
+    font-size: 2em !important;
+    margin-top: 0.67em !important;
+    margin-bottom: 0.67em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
+}
+
+.titles h2 {
+    display: block !important;
+    font-size: 1.5em !important;
+    margin-top: 0.83em !important;
+    margin-bottom: 0.83em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
+}
+
+.titles h3 {
+    display: block !important;
+    font-size: 1.17em !important;
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
+}
+
+.titles h4 {
+    display: block !important;
+    margin-top: 1.33em !important;
+    margin-bottom: 1.33em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
+}
+
+.titles h5 {
+    display: block !important;
+    font-size: .83em !important;
+    margin-top: 1.67em !important;
+    margin-bottom: 1.67em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
+}
+
+.titles h6 {
+    display: block !important;
+    font-size: .67em !important;
+    margin-top: 2.33em !important;
+    margin-bottom: 2.33em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    font-weight: bold !important;
 }

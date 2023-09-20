@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/postgres"
 	"os"
 
@@ -28,6 +29,7 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(middleware.CORS())
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			err := next(c)

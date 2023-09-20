@@ -42,21 +42,8 @@ const groups = [
     label: 'Personal Account',
     teams: [
       {
-        label: 'Alicia Koch',
+        label: 'matisiek11@gmail.com',
         value: 'personal',
-      },
-    ],
-  },
-  {
-    label: 'Teams',
-    teams: [
-      {
-        label: 'Acme Inc.',
-        value: 'acme-inc',
-      },
-      {
-        label: 'Monsters Inc.',
-        value: 'monsters',
       },
     ],
   },
@@ -78,7 +65,7 @@ const selectedTeam = ref<Team>(groups[0].teams[0])
             role="combobox"
             aria-expanded="open"
             aria-label="Select a team"
-            :class="cn('w-[200px] justify-between', $attrs.class ?? '')"
+            :class="cn(' justify-between', $attrs.class ?? '')"
         >
           <Avatar class="mr-2 h-5 w-5">
             <AvatarImage

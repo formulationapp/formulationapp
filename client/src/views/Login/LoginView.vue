@@ -6,16 +6,31 @@ import Label from "@/components/ui/label/Label.vue";
 import Input from "@/components/ui/input/Input.vue";
 import Button from "@/components/ui/button/Button.vue";
 import {ref} from "vue";
+import {useAuth} from "@/stores/auth";
+import {useRouter} from "vue-router";
+import {useWorkspaces} from "@/stores/workspaces";
 
 const isLoading = ref(false)
 
+const email = ref('');
+const password = ref('');
+const error = ref('');
+
+const auth = useAuth();
+const workspaces = useWorkspaces();
+const router = useRouter();
+
 async function onSubmit(event: Event) {
   event.preventDefault()
-  isLoading.value = true
-
-  setTimeout(() => {
-    isLoading.value = false
-  }, 3000)
+  error.value = '';
+  isLoading.value = true;
+  try {
+    await auth.login(email.value, password.value);
+    await router.push('/workspaces/' + workspaces.workspaces[0].ID);
+  } catch (err) {
+    error.value = (err as Error).message;
+  }
+  isLoading.value = false;
 }
 </script>
 
@@ -33,15 +48,15 @@ async function onSubmit(event: Event) {
 
   <div
       class="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-    <a
-        href="/register"
+    <router-link
+        to="/register"
         :class="cn(
         buttonVariants({ variant: 'ghost' }),
         'absolute right-4 top-4 md:right-8 md:top-8',
       )"
     >
       Create an account
-    </a>
+    </router-link>
     <div class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
       <div class="absolute inset-0 bg-zinc-900"/>
       <div class="relative z-20 flex items-center text-lg font-medium">
@@ -88,6 +103,7 @@ async function onSubmit(event: Event) {
                   Email
                 </Label>
                 <Input
+                    v-model="email"
                     id="email"
                     placeholder="name@example.com"
                     type="email"
@@ -97,6 +113,7 @@ async function onSubmit(event: Event) {
                     :disabled="isLoading"
                 />
                 <Input
+                    v-model="password"
                     id="password"
                     placeholder="password"
                     type="password"
@@ -108,17 +125,17 @@ async function onSubmit(event: Event) {
                 />
               </div>
               <Button :disabled="isLoading" class="mt-2">
-                <!--                <LucideSpinner v-if="isLoading" class="mr-2 h-4 w-4 animate-spin"/>-->
                 Sign In
               </Button>
+              <span class="text-red-500" v-if="error">{{ error }}</span>
             </div>
           </form>
         </div>
         <p class="px-8 text-center text-sm text-muted-foreground">
-          <a href="/register"
-             class="underline underline-offset-4 hover:text-primary">
+          <router-link to="/register"
+                       class="underline underline-offset-4 hover:text-primary">
             Create an account
-          </a>
+          </router-link>
         </p>
       </div>
     </div>

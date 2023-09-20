@@ -15,6 +15,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {useAuth} from "@/stores/auth";
+import {useRouter} from "vue-router";
+
+const auth = useAuth();
+const router = useRouter();
+
+async function logout(){
+  auth.logout();
+  await router.push('/login');
+}
 </script>
 
 <template>
@@ -23,7 +33,7 @@ import {
       <Button variant="ghost" class="relative h-8 w-8 rounded-full">
         <Avatar class="h-8 w-8">
           <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-          <AvatarFallback>SC</AvatarFallback>
+          <AvatarFallback>MW</AvatarFallback>
         </Avatar>
       </Button>
     </DropdownMenuTrigger>
@@ -31,10 +41,10 @@ import {
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">
-            shadcn
+            {{ auth.user.email }}
           </p>
           <p class="text-xs leading-none text-muted-foreground">
-            m@example.com
+            {{ auth.user.email }}
           </p>
         </div>
       </DropdownMenuLabel>
@@ -55,7 +65,7 @@ import {
         <DropdownMenuItem>New Team</DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
+      <DropdownMenuItem @click="logout">
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
