@@ -40,6 +40,22 @@ export const useForms = defineStore('forms', {
         async setDefinition(definition: string) {
             this.form.definition = definition;
             await this.save(this.form);
+        },
+        async create(workspaceID: number, name: string) {
+            const form = await api.post('workspaces/' + workspaceID + '/forms', {
+                name,
+                definition: JSON.stringify([{
+                    id: 'header',
+                    type: 'header',
+                    data: {
+                        text: name,
+                        level: 1
+                    }
+                }])
+            } as Form);
+            this.forms.push(form);
+            await this.select(form);
+            return form;
         }
     }
 });

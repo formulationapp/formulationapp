@@ -62,6 +62,7 @@
     margin-right: 0 !important;
     font-weight: bold !important;
 }
+
 [contenteditable="true"]:active,
 [contenteditable="true"]:focus{
     border:none;
