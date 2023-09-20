@@ -15,7 +15,7 @@ import {useRoute} from "vue-router";
 
 const forms = useForms();
 const route = useRoute();
-const workspaceID = parseInt(route.params.workspaceID[0]);
+const workspaceID = parseInt(route.params.workspaceID);
 
 async function save(blocks: any) {
   console.log(blocks);
@@ -26,7 +26,8 @@ async function save(blocks: any) {
 
 onMounted(async () => {
   await forms.load(workspaceID);
-  forms.select(parseInt(route.params.formID[0]));
+  console.log(parseInt(route.params.formID));
+  forms.select(parseInt(route.params.formID));
   console.log(JSON.parse(forms.form.definition));
   const editor = new EditorJS({
     holder: 'editorjs',

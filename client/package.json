@@ -26,7 +26,7 @@
     "lucide-vue-next": "^0.279.0",
     "mande": "^2.0.7",
     "pinia": "^2.1.6",
-    "radix-vue": "^0.2.2",
+    "radix-vue": "^0.2.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "v-calendar": "^2.4.1",

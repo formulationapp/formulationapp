@@ -8,8 +8,8 @@ import {cn} from "@/lib/utils";
 import {useRoute} from "vue-router";
 
 const route = useRoute();
-const workspaceID = parseInt(route.params.workspaceID[0]);
-const formID = parseInt(route.params.formID[0]);
+const workspaceID = parseInt(route.params.workspaceID);
+const formID = parseInt(route.params.formID);
 </script>
 
 <template>

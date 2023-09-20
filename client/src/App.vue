@@ -15,9 +15,9 @@ onMounted(async () => {
   await auth.try();
   await workspaces.load();
   if (route.params.hasOwnProperty('workspaceID'))
-    await forms.load(parseInt(route.params.workspaceID[0]));
+    await forms.load(parseInt(route.params.workspaceID));
   if (route.params.hasOwnProperty('formID'))
-    await forms.select(parseInt(route.params.formID[0]));
+    await forms.select(parseInt(route.params.formID));
 })
 </script>
 

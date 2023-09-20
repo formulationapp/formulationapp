@@ -1982,10 +1982,10 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-radix-vue@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/radix-vue/-/radix-vue-0.2.2.tgz#3b4f673f441e8858343df5b823617db47c454fae"
-  integrity sha512-eW1VpctGY1JPafNHzlelxt/7dx340PZgj078bLsdMQDqq9lfN7tKHaj+pSyH7tdT3OtFsxKAmO65rnlaTAUqAg==
+radix-vue@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/radix-vue/-/radix-vue-0.2.3.tgz#e5ffc89dc0a36a0b798dd4aa7c9a6ad140bc27aa"
+  integrity sha512-kA+3XCO5zXStbTrzbibhyKh62TlL+5Nq5FMAfPjS5/Ni8Qf0FGfWb924O2q2sV85HfZKHa9XcACuMN1NKZz0KA==
   dependencies:
     "@floating-ui/dom" "^1.4.2"
     "@floating-ui/vue" "^1.0.1"

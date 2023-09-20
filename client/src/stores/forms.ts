@@ -41,6 +41,10 @@ export const useForms = defineStore('forms', {
             this.form.definition = definition;
             await this.save(this.form);
         },
+        async delete(workspaceID: number, formID: number) {
+            await api.delete('workspaces/' + workspaceID + '/forms/' + formID);
+            this.forms = this.forms.filter(form => form.ID != formID);
+        },
         async create(workspaceID: number, name: string) {
             const form = await api.post('workspaces/' + workspaceID + '/forms', {
                 name,
@@ -54,7 +58,7 @@ export const useForms = defineStore('forms', {
                 }])
             } as Form);
             this.forms.push(form);
-            await this.select(form);
+            await this.select(form.ID);
             return form;
         }
     }

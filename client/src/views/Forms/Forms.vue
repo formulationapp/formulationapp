@@ -16,17 +16,29 @@ import {
   DialogTitle,
   DialogDescription
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+
+} from '@/components/ui/alert-dialog';
 import Button from "@/components/ui/button/Button.vue";
 import Input from "@/components/ui/input/Input.vue";
 import {ref} from "vue";
 
 const route = useRoute();
 const router = useRouter();
-const workspaceID = parseInt(route.params.workspaceID[0]);
+const workspaceID = parseInt(route.params.workspaceID);
 const forms = useForms();
 forms.load(workspaceID);
 
 const name = ref('');
+const showDeleteDialog = ref(false);
 
 async function create() {
   if (name.value.length == 0) return;
@@ -34,6 +46,15 @@ async function create() {
   await router.push('/workspaces/' + workspaceID + '/forms/' + form.ID);
 }
 
+async function askForDeleteForm(form) {
+  console.log(form);
+  forms.select(form.ID);
+  showDeleteDialog.value = true;
+}
+
+async function deleteForm(form: Form) {
+  await forms.delete(workspaceID, form.ID);
+}
 </script>
 
 <template>
@@ -67,9 +88,9 @@ async function create() {
     </Dialog>
   </div>
 
-  <Alert @click="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)" v-for="form in forms.forms"
+  <Alert @click.self="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)" v-for="form in forms.forms"
          class="hover:brightness-95 cursor-pointer flex justify-between">
-    <div>
+    <div @click="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)">
       <AlertTitle class="font-semibold">{{ form.name }}
         <Badge class="ml-2">Szkic</Badge>
       </AlertTitle>
@@ -80,18 +101,30 @@ async function create() {
 
     <DropdownMenu>
       <DropdownMenuTrigger class="font-bold text-xl mr-4">
-        ⋮
+        <Button variant="outline">⋮</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuSeparator/>
-        <DropdownMenuItem>Rename</DropdownMenuItem>
-        <DropdownMenuItem>Duplicate</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem @click="askForDeleteForm(form)" class="text-red-500 hover:text-red-700">Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   </Alert>
 
-
+  <AlertDialog :open="showDeleteDialog" @update:open="args => showDeleteDialog=args">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+        <AlertDialogDescription>
+          You are about to delete {{ forms.form.name }} form. This action cannot be undone.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogAction @click="deleteForm(forms.form)">Delete now</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>
 
 <style scoped>
