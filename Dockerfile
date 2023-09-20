@@ -1,5 +1,13 @@
+FROM node as clientBuilder
+WORKDIR /app
+COPY client/ .
+RUN yarn
+RUN yarn build-only
+
 FROM golang AS builder
 WORKDIR /app
+COPY --from=clientBuilder /app/dist /app/cmd/public/
+RUN ls /app/cmd/public
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./

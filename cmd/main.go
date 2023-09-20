@@ -1,10 +1,12 @@
 package main
 
 import (
+	"embed"
 	"errors"
 	"fmt"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/postgres"
+	"net/http"
 	"os"
 
 	"github.com/formulationapp/formulationapp/internal/controller"
@@ -17,6 +19,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+//go:embed public
+var public embed.FS
 
 func main() {
 	_ = godotenv.Load()
@@ -50,6 +55,14 @@ func main() {
 	services := service.NewServices(repositories, config)
 	controllers := controller.NewControllers(services)
 	controllers.Route(e)
+
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:       "public",
+		Index:      "index.html",
+		Browse:     false,
+		HTML5:      true,
+		Filesystem: http.FS(public),
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {

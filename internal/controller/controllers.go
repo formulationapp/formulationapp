@@ -59,18 +59,18 @@ func (c controllers) Answer() AnswerController {
 }
 
 func (c controllers) Route(e *echo.Echo) {
-	e.POST("/auth/login", c.userController.Login)
-	e.POST("/auth/register", c.userController.Register)
+	e.POST("/api/auth/login", c.userController.Login)
+	e.POST("/api/auth/register", c.userController.Register)
 
-	e.GET("/workspaces", c.workspaceController.ListWorkspaces)
+	e.GET("/api/workspaces", c.workspaceController.ListWorkspaces)
 
-	e.GET("/workspaces/:workspaceID/forms", c.formController.ListForms)
-	e.GET("/workspaces/:workspaceID/forms/:formID", c.formController.GetForm)
-	e.POST("/workspaces/:workspaceID/forms", c.formController.CreateForm)
-	e.PUT("/workspaces/:workspaceID/forms/:formID", c.formController.UpdateForm)
-	e.DELETE("/workspaces/:workspaceID/forms/:formID", c.formController.DeleteForm)
+	e.GET("/api/workspaces/:workspaceID/forms", c.formController.ListForms)
+	e.GET("/api/workspaces/:workspaceID/forms/:formID", c.formController.GetForm)
+	e.POST("/api/workspaces/:workspaceID/forms", c.formController.CreateForm)
+	e.PUT("/api/workspaces/:workspaceID/forms/:formID", c.formController.UpdateForm)
+	e.DELETE("/api/workspaces/:workspaceID/forms/:formID", c.formController.DeleteForm)
 
-	e.GET("/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
+	e.GET("/api/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
 
-	e.PUT("/forms/:secret/answers/:submission", c.answerController.PutAnswer)
+	e.PUT("/api/forms/:secret/answers/:submission", c.answerController.PutAnswer)
 }
