@@ -6,8 +6,8 @@ import (
 )
 
 type Membership struct {
-	UserID      uint `gorm:"primaryKey"`
-	WorkspaceID uint `gorm:"primaryKey"`
-	CreatedAt   time.Time
-	DeletedAt   gorm.DeletedAt
+	UserID      uint           `gorm:"primaryKey"`
+	WorkspaceID uint           `gorm:"primaryKey"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	DeletedAt   gorm.DeletedAt `json:"deletedAt"`
 }

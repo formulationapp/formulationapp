@@ -62,3 +62,14 @@
     margin-right: 0 !important;
     font-weight: bold !important;
 }
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+    border:none;
+    outline:none;
+}
+[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    pointer-events: none;
+    min-width: 10px;
+    caret: #ff7a18 underscore;
+}

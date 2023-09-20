@@ -20,7 +20,7 @@ forms.load(workspaceID);
   <Alert @click="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)" v-for="form in forms.forms"
          class="hover:brightness-95 cursor-pointer flex justify-between">
     <div>
-      <AlertTitle class="font-semibold">{{form.Name}}
+      <AlertTitle class="font-semibold">{{form.name}}
         <Badge class="ml-2">Szkic</Badge>
       </AlertTitle>
       <AlertDescription>

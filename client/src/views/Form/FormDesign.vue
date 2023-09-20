@@ -1,35 +1,43 @@
 <script setup lang="ts">
 
 import {Tabs, TabsContent} from "@/components/ui/tabs";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import EditorJS from "@editorjs/editorjs";
 import ShortInput from "@/editor/ShortInput";
+import ShortAnswer from "@/editor/ShortAnswer";
 import Choice from "@/editor/Choice";
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import SimpleImage from '@editorjs/simple-image';
 import Delimiter from '@editorjs/delimiter';
+import {useForms} from "@/stores/forms";
+import {useRoute} from "vue-router";
 
+const forms = useForms();
+const route = useRoute();
+const workspaceID = parseInt(route.params.workspaceID[0]);
 
-onMounted(() => {
+async function save(blocks: any) {
+  console.log(blocks);
+  const newName = blocks.filter(block => block.type == 'header')[0].data.text;
+  await forms.setName(newName);
+  await forms.setDefinition(JSON.stringify(blocks));
+}
+
+onMounted(async () => {
+  await forms.load(workspaceID);
+  forms.select(parseInt(route.params.formID[0]));
+  console.log(JSON.parse(forms.form.definition));
   const editor = new EditorJS({
     holder: 'editorjs',
     async onChange(api, event) {
-      const s = await api.saver.save();
-      console.log(s.blocks);
+      console.log((await api.saver.save()).blocks);
+      await save((await api.saver.save()).blocks);
     },
     placeholder: 'Type something to create your new form',
     data: {
       "time": 1550476186479,
-      "blocks": [
-        {
-          "type": "header",
-          "data": {
-            "text": "Wycieczka szkolna",
-            "level": 1
-          }
-        },
-      ],
+      "blocks": JSON.parse(forms.form.definition),
       "version": "2.8.1"
     },
     tools: {
@@ -38,6 +46,7 @@ onMounted(() => {
       image: SimpleImage,
       delimiter: Delimiter,
       shortInput: ShortInput,
+      shortAnswer: ShortAnswer,
       choice: Choice,
     },
   });

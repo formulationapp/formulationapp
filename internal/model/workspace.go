@@ -4,5 +4,5 @@ import "gorm.io/gorm"
 
 type Workspace struct {
 	gorm.Model
-	Name string
+	Name string `json:"name"`
 }

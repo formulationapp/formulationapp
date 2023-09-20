@@ -30,7 +30,7 @@ func (f formRepository) GetBySecret(secret string) (model.Form, error) {
 
 func (f formRepository) GetByIDAndWorkspaceID(id, workspaceID uint) (model.Form, error) {
 	var form model.Form
-	tx := f.db.Where("id = ? and workspace_id = ?", workspaceID).First(&form)
+	tx := f.db.Where("id = ? and workspace_id = ?", id, workspaceID).First(&form)
 	if tx.Error != nil {
 		return form, tx.Error
 	}

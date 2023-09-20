@@ -1,21 +1,45 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
 
+interface Form {
+    ID: number,
+    name: string
+    definition: string
+    workspaceID: number
+}
+
 interface FormsState {
-    forms: {
-        ID: number,
-        Name: string
-    }[]
+    forms: Form[]
+    form: Form,
 }
 
 
 export const useForms = defineStore('forms', {
     state: (): FormsState => ({
-        forms: []
+        forms: [],
+        form: {
+            ID: 0,
+            workspaceID: 0,
+            name: ''
+        },
     }),
     actions: {
         async load(workspaceID: number) {
             this.forms = await api.get('workspaces/' + workspaceID + '/forms')
+        },
+        select(formID: number) {
+            this.form = this.forms.find(x => x.ID == formID)!;
+        },
+        async save(form: Form) {
+            await api.put('workspaces/' + form.workspaceID + '/forms/' + form.ID, form);
+        },
+        async setName(name: string) {
+            this.form.name = name;
+            await this.save(this.form);
+        },
+        async setDefinition(definition: string) {
+            this.form.definition = definition;
+            await this.save(this.form);
         }
     }
 });

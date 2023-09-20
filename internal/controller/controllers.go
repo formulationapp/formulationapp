@@ -67,8 +67,8 @@ func (c controllers) Route(e *echo.Echo) {
 	e.GET("/workspaces/:workspaceID/forms", c.formController.ListForms)
 	e.GET("/workspaces/:workspaceID/forms/:formID", c.formController.GetForm)
 	e.POST("/workspaces/:workspaceID/forms", c.formController.CreateForm)
-	e.PUT("/workspaces/:workspaceID/forms", c.formController.UpdateForm)
-	e.DELETE("/workspaces/:workspaceID/forms", c.formController.DeleteForm)
+	e.PUT("/workspaces/:workspaceID/forms/:formID", c.formController.UpdateForm)
+	e.DELETE("/workspaces/:workspaceID/forms/:formID", c.formController.DeleteForm)
 
 	e.GET("/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
 

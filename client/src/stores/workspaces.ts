@@ -2,9 +2,9 @@ import {defineStore} from "pinia";
 import {api} from "@/api";
 
 interface WorkspacesState {
-    workspaces: [{
+    workspaces: {
         ID: number
-    }]
+    }[]
 }
 
 export const useWorkspaces = defineStore('workspaces', {
