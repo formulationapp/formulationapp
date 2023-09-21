@@ -14,6 +14,8 @@ type FormService interface {
 	GetForm(userID, workspaceID, formID uint) (model.Form, error)
 	UpdateForm(userID, workspaceID, formID uint, form dto.UpdateFormRequest) (model.Form, error)
 	DeleteForm(userID, workspaceID, formID uint) error
+
+	ViewForm(secret string) (model.Form, error)
 }
 
 type formService struct {
@@ -107,4 +109,8 @@ func (f formService) DeleteForm(userID, workspaceID, formID uint) error {
 	}
 
 	return f.formRepository.Delete(form)
+}
+
+func (f formService) ViewForm(secret string) (model.Form, error) {
+	return f.formRepository.GetBySecret(secret)
 }
