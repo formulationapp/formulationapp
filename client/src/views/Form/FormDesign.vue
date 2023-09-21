@@ -55,6 +55,9 @@ onMounted(async () => {
 </script>
 
 <template>
+
+  Secret: {{forms.form.secret}}
+
   <Tabs default-value="overview" class="space-y-4">
     <TabsContent value="overview" class="space-y-4">
       <div class="grid gap-4">

@@ -2,10 +2,12 @@ import {defineStore} from "pinia";
 import {api} from "@/api";
 
 export const useSubmissions = defineStore('submissions', {
-    state: () => ({}),
+    state: () => ({
+        form: {}
+    }),
     actions: {
-        getForm(secret:string){
-            api.get('/')
+        async loadForm(secret: string) {
+            this.form = await api.get('/forms/' + secret);
         }
     }
 })

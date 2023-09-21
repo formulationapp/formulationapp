@@ -6,6 +6,7 @@ interface Form {
     name: string
     definition: string
     workspaceID: number
+    secret: string
 }
 
 interface FormsState {

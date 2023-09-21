@@ -72,6 +72,6 @@ func (c controllers) Route(e *echo.Echo) {
 
 	e.GET("/api/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
 
-	e.PUT("/api/forms/:secret", c.formController.ViewForm)
+	e.GET("/api/forms/:secret", c.formController.ViewForm)
 	e.PUT("/api/forms/:secret/answers/:submission", c.answerController.PutAnswer)
 }

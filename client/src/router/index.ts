@@ -7,6 +7,7 @@ import FormMenu from "@/views/Form/FormMenu.vue";
 import Submissions from "@/views/Submissions/Submissions.vue";
 import FormSettings from "@/views/FormSettings/FormSettings.vue";
 import HomeView from "@/views/HomeView.vue";
+import SubmissionView from "@/views/Submission/SubmissionView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,11 @@ const router = createRouter({
                 },
             ],
         },
+        {
+            path: '/f/:secret',
+            name: 'submit',
+            component: SubmissionView
+        }
     ]
 })
 
