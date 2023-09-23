@@ -25,6 +25,7 @@ export const useForms = defineStore('forms', {
             this.form = this.forms.find(x => x.ID == formID)!;
         },
         async save(form: Form) {
+            console.log(form.data);
             await api.put('workspaces/' + form.workspaceID + '/forms/' + form.ID, form);
         },
         async setName(name: string) {

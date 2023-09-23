@@ -2,7 +2,8 @@
 import {useRoute} from "vue-router";
 import Button from "@/components/ui/button/Button.vue";
 import {useSharing} from "@/stores/sharing";
-import {Lotion} from '@dashibase/lotion';
+import {Lotion, registerBlock} from '@dashibase/lotion';
+import ShortAnswer from "@/lotion/ShortAnswer.vue";
 
 const sharing = useSharing();
 const route = useRoute();

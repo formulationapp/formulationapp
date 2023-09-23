@@ -44,7 +44,6 @@ onMounted(async () => {
   submitLabel.value = forms.form.data.submit;
 });
 
-registerBlock('SHORT_ANSWER', 'Short answer', ShortAnswer, 'io-text-outline')
 </script>
 
 <template>
