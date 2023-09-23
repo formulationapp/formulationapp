@@ -1,8 +1,13 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
+import type Form from "@/models/form";
+
+interface SharingState {
+    form: Form
+}
 
 export const useSharing = defineStore('sharing', {
-    state: () => ({
+    state: (): SharingState => ({
         form: {},
     }),
     actions: {
