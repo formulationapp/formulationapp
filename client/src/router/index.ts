@@ -1,13 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Dashboard from "@/views/Dashboard/Dashboard.vue";
-import Forms from "@/views/Forms/Forms.vue";
-import FormsMenu from "@/views/Forms/FormsMenu.vue";
-import FormDesign from "@/views/Form/FormDesign.vue";
-import FormMenu from "@/views/Form/FormMenu.vue";
-import Submissions from "@/views/Submissions/Submissions.vue";
-import FormSettings from "@/views/FormSettings/FormSettings.vue";
+import Forms from "@/views/Dashboard/Forms/Forms.vue";
+import FormsMenu from "@/views/Dashboard/Forms/FormsMenu.vue";
+import FormMenu from "@/views/Dashboard/Form/FormMenu.vue";
+import Submissions from "@/views/Dashboard/Form/FormSubmissions/Submissions.vue";
+import FormSettings from "@/views/Dashboard/Form/FormSettings/FormSettings.vue";
 import HomeView from "@/views/HomeView.vue";
-import SubmissionView from "@/views/Submission/SubmissionView.vue";
+import LoginView from "@/views/Auth/Login/LoginView.vue";
+import RegisterView from "@/views/Auth/Register/RegisterView.vue";
+import FormBox from "@/views/Sharing/FormBox/FormBox.vue";
+import FormEditor from "@/views/Dashboard/Form/FormEditor/FormEditor.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,12 +17,12 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/Login/LoginView.vue')
+            component: LoginView
         },
         {
             path: '/register',
             name: 'register',
-            component: () => import('../views/Register/RegisterView.vue')
+            component: RegisterView
         },
         {
             path: '/',
@@ -48,7 +50,7 @@ const router = createRouter({
                 {
                     path: '',
                     components: {
-                        default: FormDesign,
+                        default: FormEditor,
                         menu: FormMenu,
                     },
                 },
@@ -71,7 +73,7 @@ const router = createRouter({
         {
             path: '/f/:secret',
             name: 'submit',
-            component: SubmissionView
+            component: FormBox
         }
     ]
 })

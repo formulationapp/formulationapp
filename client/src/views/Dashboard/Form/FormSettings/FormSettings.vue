@@ -3,7 +3,7 @@
 </script>
 
 <template>
-Submissions
+  Form settings
 </template>
 
 <style scoped>

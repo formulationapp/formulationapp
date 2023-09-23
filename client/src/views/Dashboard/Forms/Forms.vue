@@ -9,12 +9,12 @@ import {useForms} from "@/stores/forms";
 import {useRoute, useRouter} from "vue-router";
 import {
   Dialog,
-  DialogHeader,
-  DialogFooter,
   DialogContent,
-  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogTrigger
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -25,11 +25,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-
 } from '@/components/ui/alert-dialog';
 import Button from "@/components/ui/button/Button.vue";
 import Input from "@/components/ui/input/Input.vue";
 import {ref} from "vue";
+import type Form from "@/models/form";
 
 const route = useRoute();
 const router = useRouter();
@@ -38,7 +38,6 @@ const forms = useForms();
 forms.load(workspaceID);
 
 const name = ref('');
-const showDeleteDialog = ref(false);
 
 async function create() {
   if (name.value.length == 0) return;
@@ -46,8 +45,9 @@ async function create() {
   await router.push('/workspaces/' + workspaceID + '/forms/' + form.ID);
 }
 
-async function askForDeleteForm(form) {
-  console.log(form);
+const showDeleteDialog = ref(false);
+
+async function askForDeleteForm(form: Form) {
   forms.select(form.ID);
   showDeleteDialog.value = true;
 }

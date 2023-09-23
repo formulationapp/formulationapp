@@ -41,7 +41,7 @@ func (f formService) CreateForm(userID, workspaceID uint, form dto.CreateFormReq
 
 	return f.formRepository.Create(model.Form{
 		Name:        form.Name,
-		Definition:  form.Definition,
+		Data:        form.Data,
 		WorkspaceID: workspaceID,
 		Secret:      util.RandStringRunes(15),
 	})
@@ -88,7 +88,7 @@ func (f formService) UpdateForm(userID, workspaceID, formID uint, payload dto.Up
 	}
 
 	form.Name = payload.Name
-	form.Definition = payload.Definition
+	form.Data = payload.Data
 
 	return f.formRepository.Update(form)
 }

@@ -8,4 +8,6 @@ type Form struct {
 	Definition  string `gorm:"type:text" json:"definition"`
 	WorkspaceID uint   `json:"workspaceID"`
 	Secret      string `json:"secret"`
+
+	Data map[string]interface{} `gorm:"-" json:"data"`
 }

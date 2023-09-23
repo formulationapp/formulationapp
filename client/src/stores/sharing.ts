@@ -1,9 +1,9 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
 
-export const useSubmissions = defineStore('submissions', {
+export const useSharing = defineStore('sharing', {
     state: () => ({
-        form: {}
+        form: {},
     }),
     actions: {
         async loadForm(secret: string) {

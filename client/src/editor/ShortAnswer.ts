@@ -1,5 +1,4 @@
 import Block from "@/editor/Block";
-import {ca, da} from "date-fns/locale";
 
 export default class ShortAnswer extends Block {
 
@@ -47,7 +46,7 @@ export default class ShortAnswer extends Block {
     static toolbox() {
         return {
             title: 'Short input',
-            icon: 'aa'
+            icon: 'a'
         };
     }
 

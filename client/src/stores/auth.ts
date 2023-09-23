@@ -3,11 +3,10 @@ import {api} from "@/api";
 import {capitalize} from "@/utils";
 import jwtDecode from "jwt-decode";
 import {useWorkspaces} from "@/stores/workspaces";
+import type User from "@/models/user";
 
 interface AuthState {
-    user: {
-        email: string
-    }
+    user: User
 }
 
 export const useAuth = defineStore('auth', {

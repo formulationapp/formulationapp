@@ -1,10 +1,9 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
+import type Workspace from "@/models/workspace";
 
 interface WorkspacesState {
-    workspaces: {
-        ID: number
-    }[]
+    workspaces: Workspace[]
 }
 
 export const useWorkspaces = defineStore('workspaces', {

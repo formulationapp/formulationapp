@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"encoding/json"
 	"github.com/formulationapp/formulationapp/internal/model"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -25,6 +26,12 @@ func (f formRepository) GetBySecret(secret string) (model.Form, error) {
 	if tx.Error != nil {
 		return form, tx.Error
 	}
+
+	err := json.Unmarshal([]byte(form.Definition), &form.Data)
+	if err != nil {
+		return form, err
+	}
+
 	return form, nil
 }
 
@@ -34,10 +41,22 @@ func (f formRepository) GetByIDAndWorkspaceID(id, workspaceID uint) (model.Form,
 	if tx.Error != nil {
 		return form, tx.Error
 	}
+
+	err := json.Unmarshal([]byte(form.Definition), &form.Data)
+	if err != nil {
+		return form, err
+	}
+
 	return form, nil
 }
 
 func (f formRepository) Create(form model.Form) (model.Form, error) {
+	j, err := json.Marshal(form.Data)
+	if err != nil {
+		return model.Form{}, err
+	}
+	form.Definition = string(j)
+
 	tx := f.db.Create(&form)
 	if tx.Error != nil {
 		return form, tx.Error
@@ -46,6 +65,12 @@ func (f formRepository) Create(form model.Form) (model.Form, error) {
 }
 
 func (f formRepository) Update(form model.Form) (model.Form, error) {
+	j, err := json.Marshal(form.Data)
+	if err != nil {
+		return model.Form{}, err
+	}
+	form.Definition = string(j)
+
 	tx := f.db.Save(form)
 	if tx.Error != nil {
 		return form, tx.Error
@@ -59,7 +84,17 @@ func (f formRepository) GetByWorkspaceID(workspaceID uint) ([]model.Form, error)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	return forms, nil
+
+	var filledForms []model.Form
+	for _, form := range forms {
+		err := json.Unmarshal([]byte(form.Definition), &form.Data)
+		if err != nil {
+			return nil, err
+		}
+		filledForms = append(filledForms, form)
+	}
+
+	return filledForms, nil
 }
 
 func (f formRepository) Delete(form model.Form) error {

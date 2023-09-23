@@ -1,13 +1,6 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
-
-interface Form {
-    ID: number,
-    name: string
-    definition: string
-    workspaceID: number
-    secret: string
-}
+import type Form from "@/models/form";
 
 interface FormsState {
     forms: Form[]
@@ -38,8 +31,12 @@ export const useForms = defineStore('forms', {
             this.form.name = name;
             await this.save(this.form);
         },
-        async setDefinition(definition: string) {
-            this.form.definition = definition;
+        async setBlocks(blocks: any) {
+            this.form.data.blocks = blocks;
+            await this.save(this.form);
+        },
+        async setSubmitLabel(label: string) {
+            this.form.data.submit = label;
             await this.save(this.form);
         },
         async delete(workspaceID: number, formID: number) {
@@ -49,14 +46,17 @@ export const useForms = defineStore('forms', {
         async create(workspaceID: number, name: string) {
             const form = await api.post('workspaces/' + workspaceID + '/forms', {
                 name,
-                definition: JSON.stringify([{
-                    id: 'header',
-                    type: 'header',
-                    data: {
-                        text: name,
-                        level: 1
-                    }
-                }])
+                data: {
+                    submit: 'Submit now',
+                    blocks: [{
+                        id: 'header',
+                        type: 'header',
+                        data: {
+                            text: name,
+                            level: 1
+                        }
+                    }]
+                }
             } as Form);
             this.forms.push(form);
             await this.select(form.ID);
