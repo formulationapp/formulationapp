@@ -26,7 +26,6 @@ export const useForms = defineStore('forms', {
             this.form = this.forms.find(x => x.ID == formID)!;
         },
         async save(form: Form) {
-            console.log(form.data);
             await api.put('workspaces/' + form.workspaceID + '/forms/' + form.ID, form);
         },
         async setName(name: string) {
@@ -65,6 +64,17 @@ export const useForms = defineStore('forms', {
             this.forms.push(form);
             await this.select(form.ID);
             return form;
+        },
+        async loadSubmissions() {
+            const submissions = await api.get('workspaces/' + this.form.workspaceID + '/forms/' + this.form.ID + '/answers');
+            return submissions;
+        },
+        getAliases(): { [key: string]: string } {
+            const aliases = {};
+            this.form.data.blocks.blocks.forEach(block => {
+                aliases[block.id] = block.details.label;
+            });
+            return aliases;
         }
     }
 });

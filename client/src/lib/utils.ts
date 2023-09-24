@@ -25,4 +25,11 @@ export function useEmitAsProps<Name extends string>(
     return result
 }
 
+export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
+    ref.value
+        = typeof updaterOrValue === 'function'
+        ? updaterOrValue(ref.value)
+        : updaterOrValue
+}
+
 export const alphabet = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');

@@ -18,6 +18,7 @@
     "@editorjs/link": "^2.5.0",
     "@editorjs/list": "^1.8.0",
     "@editorjs/simple-image": "^1.5.1",
+    "@tanstack/vue-table": "^8.10.1",
     "@tiptap/extension-bold": "^2.1.11",
     "@tiptap/extension-document": "^2.1.11",
     "@tiptap/extension-history": "^2.1.11",

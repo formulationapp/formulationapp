@@ -30,12 +30,11 @@ export const useSharing = defineStore('sharing', {
         },
         async sendAnswers() {
             for (const [field, value] of Object.entries(this.answers)) {
-                console.log(field);
-                console.log(value);
                 await api.put('/forms/' + this.form.secret + '/answers/' + this.submissionID, {
                     field, value
                 });
             }
+            localStorage.removeItem('submissionID');
         }
     }
 })
