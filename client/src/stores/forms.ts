@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {api} from "@/api";
 import type Form from "@/models/form";
+import {v4 as uuidv4} from 'uuid';
 
 interface FormsState {
     forms: Form[]
@@ -49,14 +50,16 @@ export const useForms = defineStore('forms', {
                 name,
                 data: {
                     submit: 'Submit now',
-                    blocks: [{
-                        id: 'header',
-                        type: 'header',
-                        data: {
-                            text: name,
-                            level: 1
-                        }
-                    }]
+                    blocks: {
+                        blocks: [{
+                            id: uuidv4(),
+                            type: 'TEXT',
+                            details: {
+                                value: ''
+                            },
+                        }],
+                        name
+                    }
                 }
             } as Form);
             this.forms.push(form);

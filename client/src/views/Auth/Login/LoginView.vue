@@ -46,8 +46,8 @@ async function onSubmit(event: Event) {
     />
   </div>
 
-  <div
-      class="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+  <div style="height: 100vh"
+      class=" relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
     <router-link
         to="/register"
         :class="cn(
@@ -85,7 +85,7 @@ async function onSubmit(event: Event) {
         </blockquote>
       </div>
     </div>
-    <div class="lg:p-8">
+    <div class="lg:p-8 w-[600px] mx-auto">
       <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div class="flex flex-col space-y-2 text-center">
           <h1 class="text-2xl font-semibold tracking-tight">
