@@ -15,6 +15,8 @@ type FormController interface {
 	GetForm(c echo.Context) error
 	UpdateForm(c echo.Context) error
 	DeleteForm(c echo.Context) error
+
+	ViewForm(c echo.Context) error
 }
 
 type formController struct {
@@ -97,6 +99,14 @@ func (f formController) DeleteForm(c echo.Context) error {
 		return err
 	}
 	return c.JSON(http.StatusOK, model.Form{})
+}
+
+func (f formController) ViewForm(c echo.Context) error {
+	form, err := f.formService.ViewForm(c.Param("secret"))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, form)
 }
 
 func newFormController(userService service.UserService, formService service.FormService) FormController {

@@ -20,7 +20,7 @@ type answerController struct {
 
 func (a answerController) PutAnswer(c echo.Context) error {
 	var request dto.PutAnswerRequest
-	err := c.Bind(request)
+	err := c.Bind(&request)
 	if err != nil {
 		return err
 	}

@@ -1,9 +1,12 @@
 package main
 
 import (
+	"embed"
 	"errors"
 	"fmt"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/postgres"
+	"net/http"
 	"os"
 
 	"github.com/formulationapp/formulationapp/internal/controller"
@@ -17,17 +20,21 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+//go:embed public
+var public embed.FS
+
 func main() {
 	_ = godotenv.Load()
 	dsn := os.Getenv("DSN")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		logrus.Fatalf("Error opening database: %s", err)
 	}
 
 	e := echo.New()
+	e.Use(middleware.CORS())
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			err := next(c)
@@ -48,6 +55,14 @@ func main() {
 	services := service.NewServices(repositories, config)
 	controllers := controller.NewControllers(services)
 	controllers.Route(e)
+
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:       "public",
+		Index:      "index.html",
+		Browse:     false,
+		HTML5:      true,
+		Filesystem: http.FS(public),
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {

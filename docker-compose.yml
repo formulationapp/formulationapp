@@ -5,6 +5,9 @@ services:
     environment:
       DSN: host=db user=postgres password=jqKwlS9vN0mfm1v dbname=formulation sslmode=disable
       SIGNING_SECRET: SecretYouShouldHide
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
   db:
@@ -15,5 +18,10 @@ services:
       POSTGRES_PASSWORD: 'jqKwlS9vN0mfm1v'
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 10s
+      timeout: 60s
+      retries: 5
 volumes:
   db:
