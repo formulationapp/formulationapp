@@ -11,7 +11,8 @@ const route = useRoute();
 sharing.loadForm(route.params.secret);
 const submitted = ref(false);
 
-async function submit() {
+async function submit(event) {
+  event.preventDefault();
   await sharing.sendAnswers();
   submitted.value = true;
 }
@@ -20,18 +21,19 @@ async function submit() {
 <template>
   <div class="mt-8 md:mt-48 md:w-1/2 mx-auto w-11/12" v-if="!submitted">
 
-    <div class="remove-all">
-      <Lotion :page="sharing.form.data.blocks" :readonly="true"/>
-    </div>
+    <form @submit="submit">
+      <div class="remove-all">
+        <Lotion :page="sharing.form.data.blocks" :readonly="true"/>
+      </div>
 
-    <div style="width:650px;" class="mx-auto">
+      <div style="width:650px;" class="mx-auto">
 
-      <Button size="lg" @click="submit">
-        {{ sharing.form.data.submit }}
-      </Button>
+        <Button size="lg"  type="submit">
+          {{ sharing.form.data.submit }}
+        </Button>
 
-    </div>
-
+      </div>
+    </form>
   </div>
 
   <div v-if="submitted">
