@@ -9,13 +9,18 @@
     >*</span>
   </div>
 
-  <input type="text"
+  <input type="text" v-model="value" @change="setAnswer"
          class="flex my-4 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
 </template>
 <script setup lang="ts">
-import {PropType} from 'vue'
+import {PropType, ref} from 'vue'
 import {types} from "@dashibase/lotion";
 import Editor from "@/lotion/Editor.vue";
+import {useSharing} from "@/stores/sharing";
+
+const sharing = useSharing();
+
+const value = ref();
 
 const props = defineProps({
   block: {
@@ -40,6 +45,10 @@ function onUnset() {
 function toggleRequired() {
   if (props.readonly) return;
   props.block.details.required = !props.block.details.required;
+}
+
+function setAnswer() {
+  sharing.setAnswer(props.block.id, value.value);
 }
 
 defineExpose({

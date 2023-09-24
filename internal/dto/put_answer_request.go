@@ -1,6 +1,6 @@
 package dto
 
 type PutAnswerRequest struct {
-	Field string
-	Value string
+	Field string `json:"field"`
+	Value string `json:"value"`
 }
