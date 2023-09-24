@@ -127,7 +127,7 @@ onMounted(async () => {
       </DropdownMenu>
     </div>
 
-    <div class="rounded-md border w-min mx-auto">
+    <div class="rounded-md border w-min mx-auto "  v-if="table.getRowModel().rows?.length">
       <Table>
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -161,6 +161,8 @@ onMounted(async () => {
         </TableBody>
       </Table>
     </div>
+
+    <div v-else>Test</div>
   </div>
 </template>
 

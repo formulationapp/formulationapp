@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 interface FormsState {
     forms: Form[]
     form: Form,
+    submissions: object[]
 }
 
 
@@ -17,6 +18,7 @@ export const useForms = defineStore('forms', {
             workspaceID: 0,
             name: ''
         },
+        submissions: {}
     }),
     actions: {
         async load(workspaceID: number) {
@@ -66,13 +68,14 @@ export const useForms = defineStore('forms', {
             return form;
         },
         async loadSubmissions() {
-            const submissions = await api.get('workspaces/' + this.form.workspaceID + '/forms/' + this.form.ID + '/answers');
-            return submissions;
+            this.submissions = await api.get('workspaces/' + this.form.workspaceID + '/forms/' + this.form.ID + '/answers');
+            return this.submissions;
         },
         getAliases(): { [key: string]: string } {
             const aliases = {};
             this.form.data.blocks.blocks.forEach(block => {
-                aliases[block.id] = block.details.label;
+                if (block.details.hasOwnProperty('label'))
+                    aliases[block.id] = block.details.label;
             });
             return aliases;
         }

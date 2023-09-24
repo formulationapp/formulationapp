@@ -14,7 +14,9 @@ const workspaceID = parseInt(route.params.workspaceID);
 <template>
   <nav
       :class="cn('flex items-center space-x-4 lg:space-x-6', $attrs.class ?? '')">
-    <MenuItem label="Forms" :link="'/workspaces/'+workspaceID"/>
+    <MenuItem :link="'/workspaces/'+workspaceID">
+      Forms
+    </MenuItem>
   </nav>
 
   <div class="ml-auto flex items-center space-x-4">
