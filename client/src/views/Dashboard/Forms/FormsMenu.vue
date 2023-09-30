@@ -20,8 +20,7 @@ const workspaceID = parseInt(route.params.workspaceID);
   </nav>
 
   <div class="ml-auto flex items-center space-x-4">
-    <Button>Publish!</Button>
-    <Search/>
+<!--    <Search/>-->
     <UserNav/>
   </div>
 </template>

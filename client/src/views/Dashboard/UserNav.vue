@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import {Avatar, AvatarFallback, AvatarImage,} from '@/components/ui/avatar'
+import {Button} from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +17,7 @@ import {useRouter} from "vue-router";
 const auth = useAuth();
 const router = useRouter();
 
-async function logout(){
+async function logout() {
   auth.logout();
   await router.push('/login');
 }
@@ -32,8 +28,10 @@ async function logout(){
     <DropdownMenuTrigger as-child>
       <Button variant="ghost" class="relative h-8 w-8 rounded-full">
         <Avatar class="h-8 w-8">
-          <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-          <AvatarFallback>MW</AvatarFallback>
+          <AvatarImage src="/avatars/01.png" alt="@shadcn"/>
+          <AvatarFallback>
+            <v-icon name="fa-user"/>
+          </AvatarFallback>
         </Avatar>
       </Button>
     </DropdownMenuTrigger>
@@ -48,7 +46,7 @@ async function logout(){
           </p>
         </div>
       </DropdownMenuLabel>
-      <DropdownMenuSeparator />
+      <DropdownMenuSeparator/>
       <DropdownMenuGroup>
         <DropdownMenuItem>
           Profile
@@ -64,7 +62,7 @@ async function logout(){
         </DropdownMenuItem>
         <DropdownMenuItem>New Team</DropdownMenuItem>
       </DropdownMenuGroup>
-      <DropdownMenuSeparator />
+      <DropdownMenuSeparator/>
       <DropdownMenuItem @click="logout">
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/matisiekpl/.nvm/versions/node/v14.18.3/bin/node /Users/matisiekpl/.nvm/versions/node/v14.18.3/bin/yarn add moment.js
+
+PATH: 
+  /Users/matisiekpl/go/go1.21.0/bin:/Users/matisiekpl/go/bin:/Users/matisiekpl/.shorebird/bin:/Users/matisiekpl/Library/Application Support/Herd/bin/:/Users/matisiekpl/.bun/bin:/Users/matisiekpl/miniforge3/bin:/Users/matisiekpl/.nvm/versions/node/v14.18.3/bin:/Users/matisiekpl/Library/Android/sdk/emulator:/Users/matisiekpl/.dotnet/tools:/Users/matisiekpl/.dotnet:/Users/matisiekpl/bin:/Users/matisiekpl/flutter/bin:/Users/matisiekpl/Library/Android/sdk/tools/bin:/Users/matisiekpl/.composer/vendor/bin:/Users/matisiekpl/.shorebird/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/Users/matisiekpl/.cargo/bin:/Users/matisiekpl/.linkerd2/bin:/Users/matisiekpl/go/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.18.3
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/moment.js: Not found
+      at Request.params.callback [as _callback] (/Users/matisiekpl/.nvm/versions/node/v14.18.3/lib/node_modules/yarn/lib/cli.js:67029:18)
+      at Request.self.callback (/Users/matisiekpl/.nvm/versions/node/v14.18.3/lib/node_modules/yarn/lib/cli.js:140883:22)
+      at Request.emit (events.js:400:28)
+      at Request.<anonymous> (/Users/matisiekpl/.nvm/versions/node/v14.18.3/lib/node_modules/yarn/lib/cli.js:141855:10)
+      at Request.emit (events.js:400:28)
+      at IncomingMessage.<anonymous> (/Users/matisiekpl/.nvm/versions/node/v14.18.3/lib/node_modules/yarn/lib/cli.js:141777:12)
+      at Object.onceWrapper (events.js:519:28)
+      at IncomingMessage.emit (events.js:412:35)
+      at endReadableNT (internal/streams/readable.js:1334:12)
+      at processTicksAndRejections (internal/process/task_queues.js:82:21)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

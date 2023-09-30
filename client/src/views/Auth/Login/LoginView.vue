@@ -32,6 +32,11 @@ async function onSubmit(event: Event) {
   }
   isLoading.value = false;
 }
+
+if (localStorage.getItem('token') !== null) {
+  await auth.useToken(localStorage.getItem('token'));
+  await router.push('/workspaces/' + workspaces.workspaces[0].ID);
+}
 </script>
 
 <template>
@@ -47,7 +52,7 @@ async function onSubmit(event: Event) {
   </div>
 
   <div style="height: 100vh"
-      class=" relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+       class=" relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
     <router-link
         to="/register"
         :class="cn(
@@ -96,7 +101,7 @@ async function onSubmit(event: Event) {
           </p>
         </div>
         <div :class="cn('grid gap-6', $attrs.class ?? '')">
-          <form @submit="onSubmit">
+          <form @submit="onSubmit" autocomplete="on">
             <div class="grid gap-2">
               <div class="grid gap-1">
                 <Label class="sr-only" for="email">
@@ -105,21 +110,17 @@ async function onSubmit(event: Event) {
                 <Input
                     v-model="email"
                     id="email"
+                    autocomplete="email"
                     placeholder="name@example.com"
                     type="email"
-                    auto-capitalize="none"
-                    auto-complete="email"
-                    auto-correct="off"
                     :disabled="isLoading"
                 />
                 <Input
                     v-model="password"
                     id="password"
+                    autocomplete="password"
                     placeholder="password"
                     type="password"
-                    auto-capitalize="none"
-                    auto-complete="password"
-                    auto-correct="off"
                     :disabled="isLoading"
                     class="mt-2"
                 />

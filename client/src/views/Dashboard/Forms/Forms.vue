@@ -28,24 +28,31 @@ import {
 } from '@/components/ui/alert-dialog';
 import Button from "@/components/ui/button/Button.vue";
 import Input from "@/components/ui/input/Input.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import type Form from "@/models/form";
+import moment from "moment";
 
 const route = useRoute();
 const router = useRouter();
 const workspaceID = parseInt(route.params.workspaceID);
 const forms = useForms();
-forms.load(workspaceID);
 
 const name = ref('');
+const showCreateDialog = ref(false);
+const showDeleteDialog = ref(false);
 
-async function create() {
+onMounted(async () => {
+  await forms.load(workspaceID);
+  if (forms.forms.length == 0) showCreateDialog.value = true;
+});
+
+async function create(event) {
+  if (event) event.preventDefault();
   if (name.value.length == 0) return;
   const form = await forms.create(workspaceID, name.value);
   await router.push('/workspaces/' + workspaceID + '/forms/' + form.ID);
 }
 
-const showDeleteDialog = ref(false);
 
 async function askForDeleteForm(form: Form) {
   forms.select(form.ID);
@@ -58,10 +65,11 @@ async function deleteForm(form: Form) {
 </script>
 
 <template>
-  <div class="flex justify-between">
+  <div class="w-1/2 mx-auto">
+  <div class="mb-4 flex justify-between">
     <h1 class="title text-2xl font-bold">Forms</h1>
 
-    <Dialog>
+    <Dialog :open="showCreateDialog" @update:open="args => showCreateDialog=args">
       <DialogTrigger as-child>
         <Button>
           New form
@@ -74,28 +82,31 @@ async function deleteForm(form: Form) {
             Enter title of your new fantastic form!
           </DialogDescription>
         </DialogHeader>
-        <div class="grid gap-4 py-4">
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Input v-model="name" placeholder="Form name..." id="name" class="col-span-4"/>
+        <form @submit="create">
+          <div class="grid gap-4 py-4">
+            <div class="grid grid-cols-4 items-center gap-4">
+              <Input autocomplete="off" v-model="name" placeholder="Form name..." id="name" class="col-span-4"/>
+            </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" @click="create">
-            Create now
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit">
+              Create now
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   </div>
 
   <Alert @click.self="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)" v-for="form in forms.forms"
-         class="hover:brightness-95 cursor-pointer flex justify-between">
+         class="hover:brightness-95 cursor-pointer flex justify-between mb-4">
     <div @click="$router.push('/workspaces/'+workspaceID+'/forms/'+form.ID)">
-      <AlertTitle class="font-semibold">{{ form.name }}
-        <Badge class="ml-2">Szkic</Badge>
+      <AlertTitle class="font-semibold"
+      :class="{'text-gray-400': form.name.length == 0}"
+      >{{ form.name.length > 0 ? form.name : 'untitled'}}
       </AlertTitle>
       <AlertDescription>
-        Ostatnio edytowane we wtorek
+        Edited {{moment(form.UpdatedAt).fromNow()}}
       </AlertDescription>
     </div>
 
@@ -121,10 +132,11 @@ async function deleteForm(form: Form) {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction @click="deleteForm(forms.form)">Delete now</AlertDialogAction>
+        <AlertDialogAction style="margin-top: 0" @click="deleteForm(forms.form)">Delete now</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
+  </div>
 </template>
 
 <style scoped>

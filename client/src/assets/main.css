@@ -1,8 +1,5 @@
 @import './base.css';
 
-#app {
-    height: 100vh !important;
-}
 
 .titles h1 {
     display: block !important;

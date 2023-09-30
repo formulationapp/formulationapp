@@ -14,9 +14,15 @@ async function openLink() {
 </script>
 
 <template>
-  Form settings<br/>
+  <div class="container mt-12">
+   <div class="w-1/2 mx-auto">
+      <h3 class="title text-2xl font-bold ">Form link</h3>
+      <p class="text-gray-500">Share this link with your clients</p>
+      <br/>
 
-  <Input v-model="link" readonly @click="openLink" class="cursor-pointer"></Input>
+     <Input v-model="link" readonly @click="openLink" class="cursor-pointer"></Input>
+   </div>
+  </div>
 </template>
 
 <style scoped>

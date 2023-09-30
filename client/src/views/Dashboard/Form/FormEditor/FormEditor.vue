@@ -5,9 +5,9 @@ import {useForms} from "@/stores/forms";
 import {useRoute} from "vue-router";
 import Button from "@/components/ui/button/Button.vue";
 import {v4 as uuidv4} from 'uuid';
-import {Lotion, registerBlock} from '@dashibase/lotion'
+import {Lotion} from '@dashibase/lotion'
 import '@dashibase/lotion/lib/style.css'
-import ShortAnswer from "@/lotion/ShortAnswer.vue";
+import {useDebouncedRefHistory} from "@vueuse/core";
 
 const forms = useForms();
 const route = useRoute();
@@ -24,6 +24,7 @@ const page = ref({
   }],
 });
 
+
 watch(page, async (page) => {
   console.log(page);
   await forms.setName(page.name)
@@ -36,20 +37,30 @@ async function saveSubmitLabel() {
   await forms.setSubmitLabel(submitLabel.value);
 }
 
+let undo = () => {
+};
+
 onMounted(async () => {
   await forms.load(workspaceID);
   forms.select(parseInt(route.params.formID));
 
   page.value = forms.form.data.blocks;
   submitLabel.value = forms.form.data.submit;
+
+  const h = useDebouncedRefHistory(page, {deep: true, debounce: 1000});
+  undo = h.undo;
+
+  document.addEventListener('keyup', (event) => {
+    if (event.keyCode == 90 && (event.ctrlKey || event.metaKey)) {
+      console.log('undo');
+      h.undo();
+    }
+  });
 });
 
 </script>
 
 <template>
-
-  Secret: {{ forms.form.secret }}
-
   <div class="grid gap-4">
     <div class="container ">
       <div class="remove-all">

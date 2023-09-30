@@ -26,6 +26,10 @@ import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuConte
 import DropdownMenuCheckboxItem from "@/components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue";
 import {useForms} from "@/stores/forms";
 import {useRoute} from "vue-router";
+import AlertTitle from "@/components/ui/alert/AlertTitle.vue";
+import Alert from "@/components/ui/alert/Alert.vue";
+import AlertDescription from "@/components/ui/alert/AlertDescription.vue";
+import Input from "@/components/ui/input/Input.vue";
 
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
@@ -92,12 +96,17 @@ onMounted(async () => {
 });
 
 
+const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
+async function openLink() {
+  window.open(link.value, '_blank');
+}
+
 </script>
 
 <template>
   <div class="container" v-if="isLoaded">
 
-    <div class="flex gap-2 items-center py-4">
+    <div class="flex gap-2 items-center py-4 w-3/4" v-if="table.getRowModel().rows?.length">
       <!--      <Input-->
       <!--          class="max-w-sm"-->
       <!--          placeholder="Filter submissions..."-->
@@ -127,7 +136,7 @@ onMounted(async () => {
       </DropdownMenu>
     </div>
 
-    <div class="rounded-md border w-min mx-auto "  v-if="table.getRowModel().rows?.length">
+    <div class="rounded-md border w-1/2 mx-auto "  v-if="table.getRowModel().rows?.length">
       <Table>
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -162,7 +171,15 @@ onMounted(async () => {
       </Table>
     </div>
 
-    <div v-else>Test</div>
+    <div v-else  class="w-1/2 mx-auto mt-12">
+      <Alert class="mb-4">
+        <AlertTitle>Oh no!</AlertTitle>
+        <AlertDescription>
+        There are no submissions for this form yet. Share this form with your users to start collecting submissions.
+        </AlertDescription>
+      </Alert>
+      <Input v-model="link" readonly @click="openLink" class="cursor-pointer"></Input>
+    </div>
   </div>
 </template>
 

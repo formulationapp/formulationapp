@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {api} from "@/api";
 import type Form from "@/models/form";
 import {v4 as uuidv4} from 'uuid';
+import moment from "moment";
 
 interface FormsState {
     forms: Form[]
@@ -22,7 +23,8 @@ export const useForms = defineStore('forms', {
     }),
     actions: {
         async load(workspaceID: number) {
-            this.forms = await api.get('workspaces/' + workspaceID + '/forms')
+            this.forms = (await api.get('workspaces/' + workspaceID + '/forms')) ?? [];
+            this.forms.sort((a, b) => (moment(a.CreatedAt).unix() < moment(b.CreatedAt).unix()) ? 1 : -1)
         },
         select(formID: number) {
             this.form = this.forms.find(x => x.ID == formID)!;

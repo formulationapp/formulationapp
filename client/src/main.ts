@@ -21,6 +21,7 @@ import {
     BiTypeH1,
     BiTypeH2,
     BiTypeH3,
+    FaUser,
     HiPlus,
     HiTrash,
     IoTextOutline,
@@ -32,7 +33,7 @@ import Choice from "@/lotion/Choice.vue";
 
 addIcons(HiTrash, HiPlus,
     MdDragindicator, BiTextLeft, BiTypeH1, BiTypeH2, BiTypeH3, BiHr,
-    BiQuote, IoTextOutline, BiCardChecklist, BiArrowDown, BiArrowUp, BiChevronDown);
+    BiQuote, IoTextOutline, BiCardChecklist, BiArrowDown, BiArrowUp, BiChevronDown, FaUser);
 
 registerBlock('SHORT_ANSWER', 'Short answer', ShortAnswer, 'io-text-outline')
 registerBlock('CHOICE', 'Choice', Choice, 'bi-card-checklist')

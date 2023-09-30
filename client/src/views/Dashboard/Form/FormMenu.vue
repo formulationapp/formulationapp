@@ -34,8 +34,8 @@ const forms = useForms();
   </nav>
 
   <div class="ml-auto flex items-center space-x-4">
-    <Button>Save</Button>
-    <Search/>
+    <Button @click="$router.push('/workspaces/'+workspaceID+'/forms/'+formID+'/settings')">Publish now!</Button>
+<!--    <Search/>-->
     <UserNav/>
   </div>
 </template>
