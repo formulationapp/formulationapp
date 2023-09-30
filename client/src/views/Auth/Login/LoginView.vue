@@ -33,10 +33,10 @@ async function onSubmit(event: Event) {
   isLoading.value = false;
 }
 
-if (localStorage.getItem('token') != null && localStorage.getItem('token')?.length > 10) {
-  await auth.useToken(localStorage.getItem('token'));
-  await router.push('/workspaces/' + workspaces.workspaces[0].ID);
-}
+// if (localStorage.getItem('token') != null && localStorage.getItem('token')?.length > 10) {
+//   await auth.useToken(localStorage.getItem('token'));
+//   await router.push('/workspaces/' + workspaces.workspaces[0].ID);
+// }
 </script>
 
 <template>
