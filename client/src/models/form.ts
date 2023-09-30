@@ -6,4 +6,5 @@ export default interface Form {
     data: Data
     workspaceID: number
     secret: string
+    UpdatedAt:string
 }
