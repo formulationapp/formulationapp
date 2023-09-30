@@ -33,7 +33,7 @@ import moment from "moment";
 
 
 function humanDiff(date) {
-  moment(date).fromNow()
+  return moment(date).fromNow();
 }
 
 const route = useRoute();
