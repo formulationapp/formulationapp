@@ -110,7 +110,7 @@ async function deleteForm(form: Form) {
         >{{ form.name.length > 0 ? form.name : 'untitled' }}
         </AlertTitle>
         <AlertDescription>
-          Edited {{ humanDiff(form.UpdatedAt) }}
+          Created {{ humanDiff(form.CreatedAt) }}
         </AlertDescription>
       </div>
 
