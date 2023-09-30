@@ -2,7 +2,6 @@ import {defineStore} from "pinia";
 import {api} from "@/api";
 import type Form from "@/models/form";
 import {v4 as uuidv4} from 'uuid';
-import moment from "moment";
 
 interface FormsState {
     forms: Form[]
