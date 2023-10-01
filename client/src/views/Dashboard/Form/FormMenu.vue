@@ -42,7 +42,7 @@ const forms = useForms();
   </div>
 
   <div class="ml-auto flex items-center space-x-4">
-    <Button @click="$router.push('/workspaces/'+workspaceID+'/forms/'+formID+'/settings')">Publish now!</Button>
+    <Button @click="forms.save(forms.form);$router.push('/workspaces/'+workspaceID+'/forms/'+formID+'/settings')">Publish now!</Button>
 <!--    <Search/>-->
     <UserNav/>
     <DarkModeSwitcher/>

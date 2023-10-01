@@ -34,15 +34,12 @@ export const useForms = defineStore('forms', {
         },
         async setName(name: string) {
             this.form.name = name;
-            await this.save(this.form);
         },
         async setBlocks(blocks: any) {
             this.form.data.blocks = blocks;
-            await this.save(this.form);
         },
         async setSubmitLabel(label: string) {
             this.form.data.submit = label;
-            await this.save(this.form);
         },
         async delete(workspaceID: number, formID: number) {
             await api.delete('workspaces/' + workspaceID + '/forms/' + formID);

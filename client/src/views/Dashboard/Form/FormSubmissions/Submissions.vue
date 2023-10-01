@@ -30,6 +30,7 @@ import AlertTitle from "@/components/ui/alert/AlertTitle.vue";
 import Alert from "@/components/ui/alert/Alert.vue";
 import AlertDescription from "@/components/ui/alert/AlertDescription.vue";
 import Input from "@/components/ui/input/Input.vue";
+import {copyToClipboard} from "@/utils";
 
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
@@ -95,11 +96,7 @@ onMounted(async () => {
   isLoaded.value = true;
 });
 
-
 const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
-async function openLink() {
-  window.open(link.value, '_blank');
-}
 
 </script>
 
@@ -178,7 +175,7 @@ async function openLink() {
         There are no submissions for this form yet. Share this form with your users to start collecting submissions.
         </AlertDescription>
       </Alert>
-      <Input v-model="link" readonly @click="openLink" class="cursor-pointer"></Input>
+      <Input v-model="link" readonly @click="copyToClipboard(link)" class="cursor-pointer"></Input>
     </div>
   </div>
 </template>

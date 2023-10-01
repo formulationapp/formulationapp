@@ -18,6 +18,7 @@ import AlertDialogFooter from "@/components/ui/alert-dialog/AlertDialogFooter.vu
 import AlertDialogCancel from "@/components/ui/alert-dialog/AlertDialogCancel.vue";
 import AlertDialogAction from "@/components/ui/alert-dialog/AlertDialogAction.vue";
 import Input from "@/components/ui/input/Input.vue";
+import { createToaster } from "@meforma/vue-toaster";
 
 const forms = useForms();
 const route = useRoute();
@@ -36,7 +37,6 @@ const page = ref({
 
 
 watch(page, async (page) => {
-  console.log(page);
   await forms.setName(page.name)
   await forms.setBlocks(page);
 }, {deep: true});
@@ -51,6 +51,17 @@ async function saveSubmitLabel() {
   await forms.setSubmitLabel(submitLabel.value);
   showSubmitLabelDialog.value = false;
 }
+
+const toaster = createToaster({ /* options */ });
+
+async function saveForm() {
+  await forms.save(forms.form);
+  toaster.show(`Form saved!`, {
+    type: 'success',
+    duration: 2000,
+  });
+}
+
 
 let undo = () => {
 };
@@ -103,6 +114,8 @@ onMounted(async () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <Button variant="ghost" size="lg" class="ml-4" @click="saveForm">Save form</Button>
 
       </div>
     </div>

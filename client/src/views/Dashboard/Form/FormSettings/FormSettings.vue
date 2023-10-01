@@ -3,14 +3,13 @@
 import Input from "@/components/ui/input/Input.vue";
 import {ref} from "vue";
 import {useForms} from "@/stores/forms";
+import {copyToClipboard} from "@/utils";
 
 const forms = useForms();
 
 const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
 
-async function openLink() {
-  window.open(link.value, '_blank');
-}
+
 </script>
 
 <template>
@@ -20,7 +19,7 @@ async function openLink() {
       <p class="text-gray-500">Share this link with your clients</p>
       <br/>
 
-     <Input v-model="link" readonly @click="openLink" class="cursor-pointer"></Input>
+     <Input v-model="link" readonly @click="copyToClipboard(link)" class="cursor-pointer"></Input>
    </div>
   </div>
 </template>

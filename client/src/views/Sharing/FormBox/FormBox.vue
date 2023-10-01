@@ -28,7 +28,7 @@ async function submit(event) {
 
       <div style="width:650px;" class="mx-auto">
 
-        <Button size="lg"  type="submit">
+        <Button size="lg" type="submit">
           {{ sharing.form.data.submit }}
         </Button>
 
@@ -37,7 +37,13 @@ async function submit(event) {
   </div>
 
   <div v-if="submitted">
-    Submitted!
+    <div class="grid h-screen place-items-center text-center">
+    <div class="space-y-3">
+      <h1 class="text-4xl font-bold">Form submitted!</h1>
+      <div>This form was created using <a href="https://formulationapp.com/" class="font-bold hover:underline ">Formulation</a>.</div>
+      <Button @click="window.location='https://formulationapp.com/'">Create own Form for free!</Button>
+    </div>
+    </div>
   </div>
 </template>
 
