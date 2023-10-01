@@ -21,17 +21,24 @@ const forms = useForms();
 
   <nav
       :class="cn('flex items-center space-x-4 lg:space-x-6', $attrs.class ?? '')">
-    <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID">
-      Form
-    </MenuItem>
-    <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID+'/submissions'">
-      Submissions
-      <Badge v-if="forms.submissions.length>0"> {{ forms.submissions.length }}</Badge>
-    </MenuItem>
-    <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID+'/settings'">
-      Settings
+    <MenuItem :link="'/workspaces/'+workspaceID">
+      Forms
     </MenuItem>
   </nav>
+
+  <div class="flex mx-auto border rounded-full px-4 py-2 shadow">
+    <nav class="flex space-x-4 lg:space-x-6">
+      <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID" :class="{'opacity-50':route.name=='design'}">
+        Design
+      </MenuItem>
+      <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID+'/submissions'" :class="{'opacity-50':route.name=='submissions'}">
+        Submissions
+      </MenuItem>
+      <MenuItem :link="'/workspaces/'+workspaceID+'/forms/'+formID+'/settings'" :class="{'opacity-50':route.name=='form_settings'}">
+        Settings
+      </MenuItem>
+    </nav>
+  </div>
 
   <div class="ml-auto flex items-center space-x-4">
     <Button @click="$router.push('/workspaces/'+workspaceID+'/forms/'+formID+'/settings')">Publish now!</Button>

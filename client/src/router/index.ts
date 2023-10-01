@@ -49,6 +49,7 @@ const router = createRouter({
             children: [
                 {
                     path: '',
+                    name:'design',
                     components: {
                         default: FormEditor,
                         menu: FormMenu,
@@ -56,6 +57,7 @@ const router = createRouter({
                 },
                 {
                     path: 'submissions',
+                    name:'submissions',
                     components: {
                         default: Submissions,
                         menu: FormMenu,
@@ -63,6 +65,7 @@ const router = createRouter({
                 },
                 {
                     path: 'settings',
+                    name:'form_settings',
                     components: {
                         default: FormSettings,
                         menu: FormMenu,
