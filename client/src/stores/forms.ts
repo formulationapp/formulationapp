@@ -52,7 +52,7 @@ export const useForms = defineStore('forms', {
             const form = await api.post('workspaces/' + workspaceID + '/forms', {
                 name,
                 data: {
-                    submit: 'Submit now',
+                    submit: 'Submit',
                     blocks: {
                         blocks: [{
                             id: uuidv4(),

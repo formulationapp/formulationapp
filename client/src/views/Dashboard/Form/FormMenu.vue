@@ -8,6 +8,7 @@ import {cn} from "@/lib/utils";
 import {useRoute} from "vue-router";
 import {useForms} from "@/stores/forms";
 import Badge from "@/components/ui/badge/Badge.vue";
+import DarkModeSwitcher from "@/components/DarkModeSwitcher.vue";
 
 const route = useRoute();
 const workspaceID = parseInt(route.params.workspaceID);
@@ -44,5 +45,6 @@ const forms = useForms();
     <Button @click="$router.push('/workspaces/'+workspaceID+'/forms/'+formID+'/settings')">Publish now!</Button>
 <!--    <Search/>-->
     <UserNav/>
+    <DarkModeSwitcher/>
   </div>
 </template>
