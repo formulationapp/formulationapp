@@ -1,26 +1,47 @@
 <template>
   <div class="flex flex-col gap-2 mb-4">
 
-    <div class="flex">
-      <Editor v-if="!readonly" placeholder="Enter label..." v-model="props.block.details.label" class="font-semibold"/>
-      <span v-if="readonly" class="font-semibold">{{ props.block.details.label }}</span>
+    <div class="flex justify-between">
+      <div class="flex ">
+        <div>
+          <Editor v-if="!readonly" placeholder="Enter label..." v-model="props.block.details.label"
+                  class="font-semibold"/>
+          <span v-if="readonly" class="font-semibold">{{ props.block.details.label }}</span>
+        </div>
 
-      <span class="ml-1 flex px-1 text-md rounded-lg justify-center align-middle"
-            :class="{'bg-gray-200 opacity-50':!props.block.details.multiple,'bg-orange-200':props.block.details.multiple, 'cursor-pointer':!readonly, 'invisible':readonly&&!props.block.details.multiple}"
-            @click="toggleMultipleAnswer()"
-      >Multiple answer</span>
+        <span class="ml-2 flex w-6 h-6 text-2xl rounded-full justify-center align-middle"
+              :class="{'bg-gray-200 opacity-50':!props.block.details.required,'bg-indigo-200':props.block.details.required, 'invisible':!props.block.details.required}"
+        >*</span>
+      </div>
 
-      <span class="ml-1 flex w-6 h-6 text-2xl rounded-full justify-center align-middle"
-            :class="{'bg-gray-200 opacity-50':!props.block.details.required,'bg-indigo-200':props.block.details.required, 'cursor-pointer':!readonly, 'invisible':readonly&&!props.block.details.required}"
-            @click="toggleRequired()"
-      >*</span>
-
+      <HoverCard open-delay="100" close-delay="100" v-if="!readonly">
+        <HoverCardTrigger>
+          <Button variant="outline" class="ml-auto">
+            <v-icon name="bi-gear-fill" class=" h-4 w-4 m-0"/>
+          </Button>
+        </HoverCardTrigger>
+        <HoverCardContent class="p-3 space-y-2">
+          <div class="flex justify-between">
+            Required
+            <Switch :checked="props.block.details.required"
+                    @update:checked="props.block.details.required=!props.block.details.required"/>
+          </div>
+          <div class="flex justify-between">
+            Multiple answer
+            <Switch :checked="props.block.details.multiple"
+                    @update:checked="props.block.details.multiple=!props.block.details.multiple"/>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
 
     </div>
 
     <div class="choice" v-for="(item,i) in props.block.details.choices">
       <div class="w-fit">
-        <Button variant="outline" class="h-10 align-middle p-2">
+        <Button
+            @click="select(props.block.details.choices[i])"
+            :class="{'bg-indigo-100 brightness-90':selected[props.block.details.choices[i]]}" type="button"
+            variant="outline" class="h-10 align-middle p-2">
           <Badge class="mr-3 rounded-md w-6 h-6 justify-center">{{ alphabet[i] }}</Badge>
           <Editor v-if="!readonly" placeholder="Enter option..." class="font-semibold mr-2"
                   v-model="props.block.details.choices[i]"/>
@@ -40,13 +61,18 @@
   </div>
 </template>
 <script setup lang="ts">
-import {PropType} from 'vue'
+import {PropType, ref} from 'vue'
 import {types} from "@dashibase/lotion";
 import Editor from "@/lotion/Editor.vue";
 import Button from "@/components/ui/button/Button.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
 import {OhVueIcon} from "oh-vue-icons";
-import {alphabet} from "../lib/utils";
+import {alphabet} from "@/lib/utils";
+import Switch from "@/components/ui/switch/Switch.vue";
+import HoverCard from "@/components/ui/hover-card/HoverCard.vue";
+import HoverCardTrigger from "@/components/ui/hover-card/HoverCardTrigger.vue";
+import HoverCardContent from "@/components/ui/hover-card/HoverCardContent.vue";
+import {useSharing} from "@/stores/sharing";
 
 const props = defineProps({
   block: {
@@ -72,7 +98,6 @@ if (!props.block.details.hasOwnProperty('choices'))
   }
 
 function addChoice() {
-  console.log(props.block);
   props.block.details.choices.push('');
 }
 
@@ -87,15 +112,31 @@ function toggleRequired() {
   props.block.details.required = !props.block.details.required;
 }
 
-function toggleMultipleAnswer(){
+function toggleMultipleAnswer() {
   if (props.readonly) return;
   props.block.details.multiple = !props.block.details.multiple;
 }
+
+const selected = ref({});
+const sharing = useSharing();
+
+function select(choice) {
+  selected.value[choice] = !selected.value[choice];
+  if (!props.block.details.multiple)
+    for (const key in selected.value)
+      if (key != choice)
+        selected.value[key] = false;
+
+  console.log('a');
+  sharing.setAnswer(props.block.id, JSON.stringify(selected.value));
+}
+
 
 defineExpose({
   onSet,
   onUnset,
 })
+
 </script>
 
 <style scoped>

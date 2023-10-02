@@ -49,7 +49,12 @@ async function saveSubmitLabel() {
     return;
   }
   await forms.setSubmitLabel(submitLabel.value);
+  await forms.save(forms.form);
   showSubmitLabelDialog.value = false;
+  toaster.show(`Form saved!`, {
+    type: 'success',
+    duration: 2000,
+  });
 }
 
 const toaster = createToaster({ /* options */ });

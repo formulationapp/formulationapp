@@ -15,6 +15,7 @@ import {
     BiArrowUp,
     BiCardChecklist,
     BiChevronDown,
+    BiGearFill,
     BiHr,
     BiQuote,
     BiTextLeft,
@@ -25,7 +26,8 @@ import {
     HiPlus,
     HiTrash,
     IoTextOutline,
-    MdDragindicator
+    MdDragindicator,
+    BiThreeDotsVertical
 } from "oh-vue-icons/icons";
 import {registerBlock} from "@dashibase/lotion";
 import ShortAnswer from "@/lotion/ShortAnswer.vue";
@@ -33,7 +35,7 @@ import Choice from "@/lotion/Choice.vue";
 
 addIcons(HiTrash, HiPlus,
     MdDragindicator, BiTextLeft, BiTypeH1, BiTypeH2, BiTypeH3, BiHr,
-    BiQuote, IoTextOutline, BiCardChecklist, BiArrowDown, BiArrowUp, BiChevronDown, FaUser);
+    BiQuote, IoTextOutline, BiCardChecklist, BiArrowDown, BiArrowUp, BiChevronDown, FaUser, BiGearFill,BiThreeDotsVertical);
 
 registerBlock('SHORT_ANSWER', 'Short answer', ShortAnswer, 'io-text-outline')
 registerBlock('CHOICE', 'Choice', Choice, 'bi-card-checklist')

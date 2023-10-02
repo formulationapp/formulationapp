@@ -63,7 +63,14 @@ onMounted(async () => {
           onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
         }, () => [aliases[key], h(ArrowUpDown, {class: 'ml-2 h-4 w-4'})])
       },
-      cell: ({row}) => h('div', {class: ''}, row.getValue(key)),
+      cell: ({row}) => {
+        const value = row.getValue(key);
+        if (value != undefined && value.startsWith('{') && value.endsWith('}')) {
+          const badges = Object.keys(JSON.parse(value)).map(choice => h('span', {class: 'bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 w-min'}, choice));
+          return h('div', {class: ''}, badges);
+        }
+        return h('div', {class: ''}, row.getValue(key));
+      },
     };
   });
 
@@ -133,8 +140,8 @@ const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
       </DropdownMenu>
     </div>
 
-    <div class="rounded-md border w-1/2 mx-auto "  v-if="table.getRowModel().rows?.length">
-      <Table>
+    <div class="rounded-md border w-1/2 mx-auto " v-if="table.getRowModel().rows?.length">
+      <Table class="w-full">
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
             <TableHead v-for="header in headerGroup.headers" :key="header.id">
@@ -168,11 +175,11 @@ const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
       </Table>
     </div>
 
-    <div v-else  class="w-1/2 mx-auto mt-12">
+    <div v-else class="w-1/2 mx-auto mt-12">
       <Alert class="mb-4">
         <AlertTitle>Oh no!</AlertTitle>
         <AlertDescription>
-        There are no submissions for this form yet. Share this form with your users to start collecting submissions.
+          There are no submissions for this form yet. Share this form with your users to start collecting submissions.
         </AlertDescription>
       </Alert>
       <Input v-model="link" readonly @click="copyToClipboard(link)" class="cursor-pointer"></Input>
