@@ -56,7 +56,14 @@ func main() {
 	controllers := controller.NewControllers(services)
 	controllers.Route(e)
 
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+	e.GET("/", echo.NotFoundHandler, middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:       "public/landing",
+		Index:      "index.html",
+		Browse:     false,
+		HTML5:      true,
+		Filesystem: http.FS(public),
+	}))
+	e.GET("/*", echo.NotFoundHandler, middleware.StaticWithConfig(middleware.StaticConfig{
 		Root:       "public",
 		Index:      "index.html",
 		Browse:     false,

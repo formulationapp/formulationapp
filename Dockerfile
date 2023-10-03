@@ -3,6 +3,10 @@ WORKDIR /app
 COPY client/ .
 RUN yarn
 RUN yarn build-only
+COPY landing/ /app/dist/landing
+RUN sed -i -e 's/css\//\/landing\/css\//g' /app/dist/landing/index.html
+RUN sed -i -e 's/images\//\/landing\/images\//g' /app/dist/landing/index.html
+RUN sed -i -e 's/js\//\/landing\/js\//g' /app/dist/landing/index.html
 
 FROM golang AS builder
 WORKDIR /app
