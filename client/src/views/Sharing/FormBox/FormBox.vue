@@ -13,13 +13,16 @@ const submitted = ref(false);
 
 async function submit(event) {
   event.preventDefault();
+  sharing.setSubmitted(true);
+  if (Object.values(sharing.valid).some(x => !x))
+    return;
   await sharing.sendAnswers();
   submitted.value = true;
 }
 </script>
 
 <template>
-  <div class="mt-8 md:mt-48 md:w-1/2 mx-auto w-11/12" v-if="!submitted">
+  <div class="mt-8 md:mt-48 md:w-1/2 mx-auto w-11/12" v-if="!submitted&& sharing.form.data">
 
     <form @submit="submit">
       <div class="remove-all">
@@ -38,11 +41,12 @@ async function submit(event) {
 
   <div v-if="submitted">
     <div class="grid h-screen place-items-center text-center">
-    <div class="space-y-3">
-      <h1 class="text-4xl font-bold">Form submitted!</h1>
-      <div>This form was created using <a href="https://formulationapp.com/" class="font-bold hover:underline ">Formulation</a>.</div>
-      <Button @click="window.location='https://formulationapp.com/'">Create own Form for free!</Button>
-    </div>
+      <div class="space-y-3">
+        <h1 class="text-4xl font-bold">Form submitted!</h1>
+        <div>This form was created using <a href="https://formulationapp.com/" class="font-bold hover:underline ">Formulation</a>.
+        </div>
+        <Button @click="window.location='https://formulationapp.com/'">Create own Form for free!</Button>
+      </div>
     </div>
   </div>
 </template>

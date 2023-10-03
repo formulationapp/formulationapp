@@ -66,7 +66,8 @@ onMounted(async () => {
       cell: ({row}) => {
         const value = row.getValue(key);
         if (value != undefined && value.startsWith('{') && value.endsWith('}')) {
-          const badges = Object.keys(JSON.parse(value)).map(choice => h('span', {class: 'bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 w-min'}, choice));
+          const selected = JSON.parse(value);
+          const badges = Object.keys(selected).filter(choice => selected[choice]).map(choice => h('span', {class: 'bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 w-min'}, choice));
           return h('div', {class: ''}, badges);
         }
         return h('div', {class: ''}, row.getValue(key));
@@ -110,69 +111,96 @@ const link = ref('http://' + window.location.host + '/f/' + forms.form.secret);
 <template>
   <div class="container" v-if="isLoaded">
 
-    <div class="flex gap-2 items-center py-4 w-3/4" v-if="table.getRowModel().rows?.length">
-      <!--      <Input-->
-      <!--          class="max-w-sm"-->
-      <!--          placeholder="Filter submissions..."-->
-      <!--          :model-value="table.getColumn('email')?.getFilterValue() as string"-->
-      <!--          @update:model-value=" table.getColumn('email')?.setFilterValue($event)"-->
-      <!--      />-->
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button variant="outline" class="ml-auto">
-            Columns
-            <v-icon name="bi-chevron-down" class="ml-2 h-4 w-4"/>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuCheckboxItem
-              v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
-              :key="column.id"
-              class="capitalize"
-              :checked="column.getIsVisible()"
-              @update:checked="(value) => {
+    <div v-if="table.getRowModel().rows?.length">
+      <div class="flex gap-2 items-center py-4 w-3/4" >
+        <!--      <Input-->
+        <!--          class="max-w-sm"-->
+        <!--          placeholder="Filter submissions..."-->
+        <!--          :model-value="table.getColumn('email')?.getFilterValue() as string"-->
+        <!--          @update:model-value=" table.getColumn('email')?.setFilterValue($event)"-->
+        <!--      />-->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="outline" class="ml-auto">
+              Columns
+              <v-icon name="bi-chevron-down" class="ml-2 h-4 w-4"/>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuCheckboxItem
+                v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
+                :key="column.id"
+                class="capitalize"
+                :checked="column.getIsVisible()"
+                @update:checked="(value) => {
               column.toggleVisibility(value)
             }"
-          >
-            {{ aliases[column.id.toLowerCase()] }}
-          </DropdownMenuCheckboxItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-
-    <div class="rounded-md border w-1/2 mx-auto " v-if="table.getRowModel().rows?.length">
-      <Table class="w-full">
-        <TableHeader>
-          <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-            <TableHead v-for="header in headerGroup.headers" :key="header.id">
-              <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
-                          :props="header.getContext()"/>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <template v-if="table.getRowModel().rows?.length">
-            <TableRow
-                v-for="row in table.getRowModel().rows"
-                :key="row.id"
-                :data-state="row.getIsSelected() && 'selected'"
             >
-              <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()"/>
+              {{ aliases[column.id.toLowerCase()] }}
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      <div class="rounded-md border w-1/2 mx-auto " >
+        <Table class="w-full">
+          <TableHeader>
+            <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+              <TableHead v-for="header in headerGroup.headers" :key="header.id">
+                <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+                            :props="header.getContext()"/>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <template v-if="table.getRowModel().rows?.length">
+              <TableRow
+                  v-for="row in table.getRowModel().rows"
+                  :key="row.id"
+                  :data-state="row.getIsSelected() && 'selected'"
+              >
+                <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()"/>
+                </TableCell>
+              </TableRow>
+            </template>
+
+            <TableRow v-else>
+              <TableCell
+                  col-span="{columns.length}"
+                  class="h-24 text-center"
+              >
+                No results.
               </TableCell>
             </TableRow>
-          </template>
+          </TableBody>
+        </Table>
+      </div>
 
-          <TableRow v-else>
-            <TableCell
-                col-span="{columns.length}"
-                class="h-24 text-center"
-            >
-              No results.
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <div class="flex items-center justify-end space-x-2 py-4  w-1/2 mx-auto">
+        <div class="flex-1 text-sm text-muted-foreground">
+          {{ table.getFilteredSelectedRowModel().rows.length }} of
+          {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+        </div>
+        <div class="space-x-2">
+          <Button
+              variant="outline"
+              size="sm"
+              :disabled="!table.getCanPreviousPage()"
+              @click="table.previousPage()"
+          >
+            Previous
+          </Button>
+          <Button
+              variant="outline"
+              size="sm"
+              :disabled="!table.getCanNextPage()"
+              @click="table.nextPage()"
+          >
+            Next
+          </Button>
+        </div>
+      </div>
     </div>
 
     <div v-else class="w-1/2 mx-auto mt-12">

@@ -44,6 +44,7 @@
     "moment": "^2.29.4",
     "pinia": "^2.1.6",
     "radix-vue": "^0.4.1",
+    "rxjs": "^7.8.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",

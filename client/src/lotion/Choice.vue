@@ -12,6 +12,8 @@
         <span class="ml-2 flex w-6 h-6 text-2xl rounded-full justify-center align-middle"
               :class="{'bg-gray-200 opacity-50':!props.block.details.required,'bg-indigo-200':props.block.details.required, 'invisible':!props.block.details.required}"
         >*</span>
+
+        <span class="italic text-red-500 ml-2" v-if="!valid && sharing.submitted">This field is required.</span>
       </div>
 
       <HoverCard open-delay="100" close-delay="100" v-if="!readonly">
@@ -61,7 +63,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import {PropType, ref} from 'vue'
+import {computed, PropType, ref} from 'vue'
 import {types} from "@dashibase/lotion";
 import Editor from "@/lotion/Editor.vue";
 import Button from "@/components/ui/button/Button.vue";
@@ -101,41 +103,25 @@ function addChoice() {
   props.block.details.choices.push('');
 }
 
-function onSet() {
-}
-
-function onUnset() {
-}
-
-function toggleRequired() {
-  if (props.readonly) return;
-  props.block.details.required = !props.block.details.required;
-}
-
-function toggleMultipleAnswer() {
-  if (props.readonly) return;
-  props.block.details.multiple = !props.block.details.multiple;
-}
-
 const selected = ref({});
 const sharing = useSharing();
 
 function select(choice) {
+  if(!props.readonly) return;
   selected.value[choice] = !selected.value[choice];
   if (!props.block.details.multiple)
     for (const key in selected.value)
       if (key != choice)
         selected.value[key] = false;
 
-  console.log('a');
-  sharing.setAnswer(props.block.id, JSON.stringify(selected.value));
+  sharing.setAnswer(props.block.id, JSON.stringify(selected.value), valid.value);
 }
 
-
-defineExpose({
-  onSet,
-  onUnset,
-})
+const valid = computed(() => {
+  if (!props.block.details.required)
+    return true;
+  return Object.values(selected.value).some(v => v);
+});
 
 </script>
 

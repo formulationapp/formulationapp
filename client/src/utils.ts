@@ -20,3 +20,11 @@ export async function copyToClipboard(text) {
         window.open(link.value, '_blank');
     });
 }
+
+function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+}

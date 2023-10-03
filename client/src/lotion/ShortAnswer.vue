@@ -70,7 +70,7 @@ function toggleRequired() {
 }
 
 function setAnswer() {
-  sharing.setAnswer(props.block.id, value.value);
+  sharing.setAnswer(props.block.id, value.value, props.block.details.required ? value.value.length > 0 : '');
 }
 
 defineExpose({
