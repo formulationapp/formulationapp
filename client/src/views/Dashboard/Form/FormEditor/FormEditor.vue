@@ -19,14 +19,7 @@ import AlertDialogCancel from "@/components/ui/alert-dialog/AlertDialogCancel.vu
 import AlertDialogAction from "@/components/ui/alert-dialog/AlertDialogAction.vue";
 import Input from "@/components/ui/input/Input.vue";
 import {createToaster} from "@meforma/vue-toaster";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu'
 
 const forms = useForms();
 const route = useRoute();
@@ -97,6 +90,26 @@ onMounted(async () => {
   });
 });
 
+function insertQuestion(type: string) {
+  if (page.value.blocks[page.value.blocks.length - 1].type === "TEXT") {
+    page.value.blocks[page.value.blocks.length - 1] = {
+      id: uuidv4(),
+      type: type,
+      details: {
+        value: ''
+      },
+    };
+  } else {
+    page.value.blocks.push({
+      id: uuidv4(),
+      type: type,
+      details: {
+        value: ''
+      },
+    });
+  }
+}
+
 </script>
 
 <template>
@@ -112,8 +125,8 @@ onMounted(async () => {
             <Button variant="outline">Add question</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Short answer</DropdownMenuItem>
-            <DropdownMenuItem>Choice</DropdownMenuItem>
+            <DropdownMenuItem @click="insertQuestion('SHORT_ANSWER')">Short answer</DropdownMenuItem>
+            <DropdownMenuItem @click="insertQuestion('CHOICE')">Choice</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
