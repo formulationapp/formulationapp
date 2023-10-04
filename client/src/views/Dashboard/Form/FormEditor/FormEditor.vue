@@ -18,7 +18,15 @@ import AlertDialogFooter from "@/components/ui/alert-dialog/AlertDialogFooter.vu
 import AlertDialogCancel from "@/components/ui/alert-dialog/AlertDialogCancel.vue";
 import AlertDialogAction from "@/components/ui/alert-dialog/AlertDialogAction.vue";
 import Input from "@/components/ui/input/Input.vue";
-import { createToaster } from "@meforma/vue-toaster";
+import {createToaster} from "@meforma/vue-toaster";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 const forms = useForms();
 const route = useRoute();
@@ -57,7 +65,7 @@ async function saveSubmitLabel() {
   });
 }
 
-const toaster = createToaster({ /* options */ });
+const toaster = createToaster({ /* options */});
 
 async function saveForm() {
   await forms.save(forms.form);
@@ -96,6 +104,18 @@ onMounted(async () => {
     <div class="container ">
       <div class="remove-all">
         <Lotion :page="page"/>
+      </div>
+
+      <div style="width:650px;" class="mx-auto mb-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="outline">Add question</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Short answer</DropdownMenuItem>
+            <DropdownMenuItem>Choice</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div style="width:650px;" class="mx-auto">
