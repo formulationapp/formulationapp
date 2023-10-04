@@ -16,6 +16,8 @@ services:
     environment:
       POSTGRES_DB: formulation
       POSTGRES_PASSWORD: 'jqKwlS9vN0mfm1v'
+    ports:
+      - "5449:5432"
     volumes:
       - db:/var/lib/mysql
     healthcheck:
