@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/formulationapp/formulationapp/internal/client"
 	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/repository"
 )
@@ -11,6 +12,7 @@ type Services interface {
 	Workspace() WorkspaceService
 	Form() FormService
 	Answer() AnswerService
+	AI() AIService
 }
 
 type services struct {
@@ -19,14 +21,16 @@ type services struct {
 	workspaceService  WorkspaceService
 	formService       FormService
 	answerService     AnswerService
+	aiService         AIService
 }
 
-func NewServices(repositories repository.Repositories, config dto.Config) Services {
+func NewServices(repositories repository.Repositories, clients client.Clients, config dto.Config) Services {
 	userService := newUserService(repositories.User(), repositories.Membership(), repositories.Workspace(), config)
 	membershipService := newMembershipService(repositories.Membership())
 	workspaceService := newWorkspaceService(repositories.Workspace(), repositories.Membership())
 	formService := newFormService(repositories.Form(), workspaceService)
 	answerService := newAnswerService(workspaceService, repositories.Form(), repositories.Answer())
+	aiService := newAIService(clients.AI())
 
 	return &services{
 		userService:       userService,
@@ -34,6 +38,7 @@ func NewServices(repositories repository.Repositories, config dto.Config) Servic
 		workspaceService:  workspaceService,
 		formService:       formService,
 		answerService:     answerService,
+		aiService:         aiService,
 	}
 }
 
@@ -55,4 +60,8 @@ func (s services) Form() FormService {
 
 func (s services) Answer() AnswerService {
 	return s.answerService
+}
+
+func (s services) AI() AIService {
+	return s.aiService
 }

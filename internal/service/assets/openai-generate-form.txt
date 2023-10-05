@@ -1,0 +1,24 @@
+using following question types:
+SHORT_ANSWER:
+{
+    "type": "SHORT_ANSWER",
+    "details": {
+        "label": "What is your name?",
+        "required": true,
+    }
+}
+
+CHOICE:
+{
+    "type": "CHOICE",
+    "details": {
+        "required": true,
+        "choices": ["A", "B", "C"]
+    }
+}
+
+write JSON Array of form:
+
+{{.Prompt}}
+
+return only JSON

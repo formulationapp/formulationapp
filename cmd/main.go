@@ -4,6 +4,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"github.com/formulationapp/formulationapp/internal/client"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/postgres"
 	"net/http"
@@ -49,10 +50,14 @@ func main() {
 		}
 	})
 
-	config := dto.Config{SigningSecret: os.Getenv("SIGNING_SECRET")}
+	config := dto.Config{
+		SigningSecret:      os.Getenv("SIGNING_SECRET"),
+		DefaultOpenAIToken: os.Getenv("OPENAI_TOKEN"),
+	}
 
 	repositories := repository.NewRepositories(db)
-	services := service.NewServices(repositories, config)
+	clients := client.NewClients(config)
+	services := service.NewServices(repositories, clients, config)
 	controllers := controller.NewControllers(services)
 	controllers.Route(e)
 

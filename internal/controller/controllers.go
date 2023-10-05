@@ -27,7 +27,7 @@ func NewControllers(services service.Services) Controllers {
 	userController := newUserController(services.User())
 	workspaceController := newWorkspaceController(services.Workspace(), services.User())
 	membershipController := newMembershipController(services.Membership())
-	formController := newFormController(services.User(), services.Form())
+	formController := newFormController(services.User(), services.Form(), services.AI())
 	answerController := newAnswerController(services.User(), services.Answer())
 	return &controllers{
 		userController:       userController,
@@ -69,6 +69,8 @@ func (c controllers) Route(e *echo.Echo) {
 	e.POST("/api/workspaces/:workspaceID/forms", c.formController.CreateForm)
 	e.PUT("/api/workspaces/:workspaceID/forms/:formID", c.formController.UpdateForm)
 	e.DELETE("/api/workspaces/:workspaceID/forms/:formID", c.formController.DeleteForm)
+
+	e.POST("/api/ai/generate", c.formController.GenerateForm)
 
 	e.GET("/api/workspaces/:workspaceID/forms/:formID/answers", c.answerController.ListAnswers)
 

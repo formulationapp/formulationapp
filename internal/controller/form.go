@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"context"
+	"encoding/json"
 	"github.com/formulationapp/formulationapp/internal/dto"
 	"github.com/formulationapp/formulationapp/internal/model"
 	"github.com/formulationapp/formulationapp/internal/service"
@@ -15,6 +17,7 @@ type FormController interface {
 	GetForm(c echo.Context) error
 	UpdateForm(c echo.Context) error
 	DeleteForm(c echo.Context) error
+	GenerateForm(c echo.Context) error
 
 	ViewForm(c echo.Context) error
 }
@@ -22,6 +25,7 @@ type FormController interface {
 type formController struct {
 	userService service.UserService
 	formService service.FormService
+	aiService   service.AIService
 }
 
 func (f formController) CreateForm(c echo.Context) error {
@@ -109,9 +113,28 @@ func (f formController) ViewForm(c echo.Context) error {
 	return c.JSON(http.StatusOK, form)
 }
 
-func newFormController(userService service.UserService, formService service.FormService) FormController {
+func (f formController) GenerateForm(c echo.Context) error {
+	var payload dto.GenerateFormRequest
+	err := c.Bind(&payload)
+	if err != nil {
+		return err
+	}
+	form, err := f.aiService.GenerateForm(context.Background(), payload.Prompt)
+	if err != nil {
+		return err
+	}
+	var data interface{}
+	err = json.Unmarshal([]byte(form), &data)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, data)
+}
+
+func newFormController(userService service.UserService, formService service.FormService, aiService service.AIService) FormController {
 	return &formController{
 		userService: userService,
 		formService: formService,
+		aiService:   aiService,
 	}
 }
