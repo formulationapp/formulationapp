@@ -35,7 +35,7 @@ export const useForms = defineStore('forms', {
         async setName(name: string) {
             this.form.name = name;
         },
-        async setBlocks(blocks: any) {
+        setBlocks(blocks: any) {
             this.form.data.blocks = blocks;
         },
         async setSubmitLabel(label: string) {
@@ -77,6 +77,16 @@ export const useForms = defineStore('forms', {
                     aliases[block.id] = block.details.label;
             });
             return aliases;
+        },
+        async generate(workspaceID: number, prompt: string) {
+            const blocks = await api.post('ai/generate', {
+                prompt
+            });
+            const form = (await this.create(workspaceID, 'new form')) as Form;
+            form.data.blocks.blocks = blocks;
+            await this.save(form);
+            this.select(form.ID);
+            return form;
         }
     }
 });

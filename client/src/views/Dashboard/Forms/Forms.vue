@@ -30,6 +30,7 @@ import Input from "@/components/ui/input/Input.vue";
 import {onMounted, ref} from "vue";
 import type Form from "@/models/form";
 import moment from "moment";
+import Textarea from "@/components/ui/textarea/Textarea.vue";
 
 
 function humanDiff(date) {
@@ -65,6 +66,17 @@ async function askForDeleteForm(form: Form) {
 
 async function deleteForm(form: Form) {
   await forms.delete(workspaceID, form.ID);
+}
+
+const prompt = ref('');
+const isGenerating = ref(false);
+
+async function generate(event) {
+  if (event) event.preventDefault();
+  isGenerating.value = true;
+  const form = await forms.generate(workspaceID, prompt.value)
+  isGenerating.value = false;
+  await router.push('/workspaces/' + workspaceID + '/forms/' + form.ID);
 }
 </script>
 
@@ -140,6 +152,17 @@ async function deleteForm(form: Form) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+
+    <form @submit="generate">
+      <h2>Use AI to generate your form</h2>
+      <Textarea required v-model="prompt" class="mt-2"
+                placeholder="Create form for gathering feedback about new course."/>
+
+      <Button class="mt-4" :disabled="isGenerating">
+        <span v-if="isGenerating">Generating...</span>
+        <span v-else>Generate using AI</span>
+      </Button>
+    </form>
   </div>
 </template>
 

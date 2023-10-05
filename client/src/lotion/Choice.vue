@@ -96,6 +96,7 @@ const props = defineProps({
 if (!props.block.details.hasOwnProperty('choices'))
   props.block.details = {
     required: true,
+    label: props.block.details.label,
     choices: ['']
   }
 
