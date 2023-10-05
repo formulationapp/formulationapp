@@ -132,7 +132,6 @@ function insertQuestion(type: string) {
       </div>
 
       <div style="width:650px;" class="mx-auto">
-
         <AlertDialog :open="showSubmitLabelDialog" @update:open="args => showSubmitLabelDialog=args">
           <AlertDialogTrigger as-child>
             <Button size="lg">
@@ -154,7 +153,6 @@ function insertQuestion(type: string) {
         </AlertDialog>
 
         <Button variant="ghost" size="lg" class="ml-4" @click="saveForm">Save form</Button>
-
       </div>
     </div>
   </div>

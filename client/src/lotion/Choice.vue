@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-2 mb-4">
+  <div class="flex flex-col gap-2 mb-4 border border-b p-4 rounded-md">
 
     <div class="flex justify-between">
       <div class="flex ">
         <div>
           <Editor v-if="!readonly" placeholder="Enter label..." v-model="props.block.details.label"
-                  class="font-semibold"/>
+                  class="font-semibold border h-min py-0.5 px-1 rounded-md"/>
           <span v-if="readonly" class="font-semibold">{{ props.block.details.label }}</span>
         </div>
 
@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <span @click="addChoice" v-if="!readonly" class="opacity-50 cursor-pointer hover:opacity-100">Press ⌥ + G to add new option</span>
+    <span @click="addChoice" v-if="!readonly" class="opacity-50 cursor-pointer hover:opacity-100">Add new option</span>
   </div>
 </template>
 <script setup lang="ts">
